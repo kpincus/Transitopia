@@ -1,0 +1,138 @@
+* {
+  font-family:"Raleway", sans-serif;
+  color: #ddd; 
+  font-weight: 700; 
+  margin: 0;
+  padding:0;
+}
+
+html{ 
+  background-color: #191b1d; 
+}
+
+body {
+  background-color: #191b1d; 
+  margin: 0;
+  color: #ddd;
+  padding: 20px;
+}
+
+div {
+  background-color: #191b1d; 
+  margin: 0;
+  padding: 0;
+  float: left;
+  display: inline-block;
+}
+
+h1, h2, h3, h4 { 
+  font-family:"Raleway", sans-serif;
+  font-weight: 700; 
+  text-transform: uppercase;
+}
+
+h1 { 
+  font-size: 66px;
+  padding: 0px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+p { 
+  font-family: "Open Sans";
+  font-weight: 300;
+ }
+
+#tableRows text { 
+  font-weight: 300;
+  font-family: "Open Sans";
+}
+
+/* D3 elements styling */
+#map { height: 650px; margin-top: 10px; }
+text { fill: white; }
+.axis { fill: none; }
+.axis text { fill: white; font-weight: 300; }
+.axis path, .axis line { stroke-width: 0; }
+.x path, .x line { stroke: white; stroke-width: 1; fill: none;}
+.ratio line, .ratio path { stroke: white; stroke-width: 1; fill: none; }
+/* Drag styling */
+
+.ratio .halo {
+  stroke: white;
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+
+.domain { 
+ stroke: white;
+  stroke-width: 2px;
+ }
+
+.slider .handle path {
+  stroke: white;
+  stroke-width: 15px;
+  pointer-events: none;
+}
+
+.slider .handle text {
+  fill: white;
+  text-align: center;
+  font-size: 18px;
+}
+/* Div element styling */ 
+#second-third { 
+  padding-top: 20px;
+}
+
+#chart { 
+  margin-top: 20px;
+  overflow-y: scroll;
+  height: 600px;
+}
+
+#calculations { 
+  padding-top: 20px;
+  height: 800px;
+}
+
+#calculations{ 
+  padding-right: 0;
+  padding-left: 0;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+#tableNames { 
+  margin-top: 15px;
+}
+
+#tableRows { 
+  margin-top: 15px;
+  height: 650px;
+  overflow-y: scroll;
+}
+
+.padded-title {
+  margin: 10px;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, .1);
+}
+/*These elements are only visible to screen readers*/
+.accessible
+{ 
+  position:absolute;
+  left:-10000px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+
