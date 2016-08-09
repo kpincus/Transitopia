@@ -9,6 +9,8 @@ var projection = d3.geo.conicConformal()
   
 var geoPath = d3.geo.path().projection(projection); 
 
+var comma = d3.format(",");
+
 //Using the queue.js library
 queue()
   .defer(d3.csv, "sourceTable.csv")
@@ -17,7 +19,7 @@ queue()
   .awaitAll(function(error, results){ 
     CTPS.demoApp.generateMap(results[1]);
     CTPS.demoApp.generatePanel(results[0]);
-    //CTPS.demoApp.generateSavings(results[0]);
+    CTPS.demoApp.generateSavings(results[0]);
   }); 
 
 CTPS.demoApp.generateMap = function(tracts) {  
@@ -32,7 +34,7 @@ CTPS.demoApp.generateMap = function(tracts) {
 
   var tractMap = d3.select("#map").append("svg")
                 .attr("width", "100%")
-                .attr("height", 650)
+                .attr("height", 600)
 
   tractMap.selectAll(".tracts")
       .data(topojson.feature(tracts, tracts.objects.tract_census_2).features)
@@ -48,12 +50,12 @@ CTPS.demoApp.generatePanel = function(source) {
   var routes = [];
 
   source.forEach(function(i){
-      routes.push("Route " + i.Route);
+      routes.push(i.Route);
       i.Wdky_Riders = +i.Wdky_Riders;
       i.Minority_Percent = +i.Minority_Percent;
   })
 
-  var height = 580; 
+  var height = 480; 
 
   var toggler = d3.select("#chart").append("svg")
                   .attr("width", "100%")
@@ -64,15 +66,15 @@ CTPS.demoApp.generatePanel = function(source) {
 
   var xScale = d3.scale.linear()
               .domain([0, 100])
-              .range([70, w - 50])
+              .range([120, w - 30])
 
   var xScaleLength = d3.scale.linear()
                     .domain([0, 100])
-                    .range([0, w - 120])
+                    .range([0, w - 150])
 
   var yScale = d3.scale.ordinal()
               .domain(routes)
-              .rangePoints([35, height - 50])
+              .rangePoints([35, height - 15])
 
   var xAxis = d3.svg.axis().scale(xScale).orient("top").ticks(10);
   var yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(-w + 100, 0, 0);
@@ -82,17 +84,17 @@ CTPS.demoApp.generatePanel = function(source) {
     .call(xAxis)
   
   toggler.append("g").attr("class", "axis")
-    .attr("transform", "translate(10, 3)")
+    .attr("transform", "translate(50, 5)")
     .call(yAxis)
     .selectAll("text")
-      .style("text-anchor", "start")
+      .style("text-anchor", "middle")
 
   toggler.append("rect")
     .attr("class", "affected")
     .attr("x", xScale(0))
     .attr("y", 30)
     .attr("width", xScaleLength(47.5))
-    .attr("height", height - 65)
+    .attr("height", height - 15)
     .style("fill", "#ddd")
     .style("fill-opacity", .05)
 
@@ -102,7 +104,7 @@ CTPS.demoApp.generatePanel = function(source) {
     .append("rect")
       .attr("class", "minorityCI")
       .attr("x", function(d) { return xScale(d.MIN_90pct_Lower); })
-      .attr("y", function(d) { return yScale("Route " + d.Route); })
+      .attr("y", function(d) { return yScale(d.Route); })
       .attr("height", 10)
       .attr("width", function(d) { return xScaleLength(d.MIN_90pct_Upper - d.MIN_90pct_Lower); })
       .attr("fill-opacity", .1)
@@ -114,7 +116,7 @@ CTPS.demoApp.generatePanel = function(source) {
     .append("rect")
       .attr("class", "minorityPercent")
       .attr("x", function(d) { return xScale(d.Minority_Percent); })
-      .attr("y", function(d) { return yScale("Route " + d.Route); })
+      .attr("y", function(d) { return yScale(d.Route); })
       .attr("height", 10)
       .attr("width", 2)
       .attr("fill-opacity", 1)
@@ -211,43 +213,82 @@ function brushed() {
   var maxTotalSavings = 0; 
   var totalPercent = 0; 
   var totalPop = 0; 
-  var comma = d3.format(",");
 
   source.forEach(function(i){ 
-    if (i.Minority_Percent < value * 47.5) {
-      d3.select("#routeNo")
-        .append("text")
-        .html("Rt " + i.Route + "<br>")
-
-      d3.select("#ridership")
-        .append("text")
-        .html(parseInt(i.Wdky_Riders) + "<br>")
-
-      d3.select("#percentMin")
-        .append("text")
-        .html(d3.round(i.Minority_Percent) + "%<br>")
-
-      d3.select("#minSavings")
-        .append("text")
-        .html("$" + comma(parseInt(i.MinSavings20pctHrs)) + "<br>")
-
-      d3.select("#maxSavings")
-        .append("text")
-        .html("$" + comma(parseInt(i.MaxSavings100pctHrs)) + "<br>")
-
       minTotalSavings += +i.MinSavings20pctHrs; 
       maxTotalSavings += +i.MaxSavings100pctHrs; 
       totalPercent += i.Wdky_Riders * i.Minority_Percent;
       totalPop += +i.Wdky_Riders;
-    }
+    })
 
     d3.select("#minTotSavings").text("$" + comma(parseInt(minTotalSavings)));
     d3.select("#maxTotSavings").text("$" + comma(parseInt(maxTotalSavings)));
     d3.select("#globalMinority").text(d3.round(totalPercent/totalPop, 1))
-    d3.select("#globalPop").text(parseInt(totalPercent));
+    d3.select("#globalPop").text(parseInt(totalPercent/100));
 
-  })
 }//end function brushed()
 
 
+}
+
+
+CTPS.demoApp.generateSavings = function(source) {
+  var routes = [];
+
+  source.forEach(function(i){
+      routes.push(i.Route);
+      i.Wdky_Riders = +i.Wdky_Riders;
+      i.Minority_Percent = +i.Minority_Percent;
+  })
+
+  var height = 480; 
+
+  var toggler = d3.select("#tableRows").append("svg")
+                  .attr("width", "100%")
+                  .attr("height", height)
+
+  var w = $("#tableRows").width();
+
+
+  var xScale = d3.scale.linear()
+              .domain([0, 100])
+              .range([120, w - 30])
+
+  var xScaleLength = d3.scale.linear()
+                    .domain([0, 100])
+                    .range([0, w - 150])
+
+  var yScale = d3.scale.ordinal()
+              .domain(routes)
+              .rangePoints([15, height - 35])
+
+  var yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(-w + 100, 0, 0);
+  
+  toggler.append("g").attr("class", "axis")
+    .attr("transform", "translate(20, -5)")
+    .call(yAxis)
+    .selectAll("text")
+      .style("text-anchor", "middle")
+
+  toggler.selectAll(".numRiders")
+    .data(source)
+    .enter()
+    .append("text")
+      .attr("class", "numRiders")
+      .attr("x", 90)
+      .attr("y", function(d) { return yScale(d.Route); })
+      .attr("fill", "#ddd")
+      .text(function(d) { return comma(d.Wdky_Riders); })
+      .style("text-anchor", "middle")
+
+  toggler.selectAll(".minPercent")
+    .data(source)
+    .enter()
+    .append("text")
+      .attr("class", "minPercent")
+      .attr("x", 160)
+      .attr("y", function(d) { return yScale(d.Route); })
+      .attr("fill", "#ddd")
+      .text(function(d) { return comma(d.Minority_Percent) + "%"; })
+      .style("text-anchor", "middle")
 }

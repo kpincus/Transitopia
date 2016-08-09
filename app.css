@@ -49,7 +49,7 @@ p {
 }
 
 /* D3 elements styling */
-#map { height: 650px; margin-top: 10px; }
+#map { height: 600px; padding: 10px; }
 text { fill: white; }
 .axis { fill: none; }
 .axis text { fill: white; font-weight: 300; }
@@ -81,19 +81,17 @@ text { fill: white; }
   font-size: 18px;
 }
 /* Div element styling */ 
-#second-third { 
-  padding-top: 20px;
+
+#routePercents { 
+  overflow: visible;
 }
 
 #chart { 
-  margin-top: 20px;
-  overflow-y: scroll;
-  height: 600px;
+  overflow: visible;
+  height: 500px;
 }
 
 #calculations { 
-  padding-top: 20px;
-  height: 800px;
 }
 
 #calculations{ 
@@ -109,12 +107,24 @@ text { fill: white; }
 
 #tableRows { 
   margin-top: 15px;
-  height: 650px;
+  height: 550px;
   overflow-y: scroll;
 }
 
+#target-savings { 
+ color: orange;
+ font-size: 3rem;
+}
+
+.highlighted { 
+ color: orange;
+}
 .padded-title {
   margin: 10px;
+}
+
+.lowercase { 
+  text-transform: capitalize;
 }
 
 ::-webkit-scrollbar {
