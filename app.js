@@ -12,39 +12,48 @@ var geoPath = d3.geo.path().projection(projection);
 //Using the queue.js library
 queue()
   .defer(d3.csv, "sourceTable.csv")
+  .defer(d3.json, "tract_census.topojson")
 
   .awaitAll(function(error, results){ 
-    CTPS.demoApp.generateMap();
+    CTPS.demoApp.generateMap(results[1]);
     CTPS.demoApp.generatePanel(results[0]);
     //CTPS.demoApp.generateSavings(results[0]);
   }); 
 
-CTPS.demoApp.generateMap = function() {  
+CTPS.demoApp.generateMap = function(tracts) {  
 
-  var mymap = L.map('map').setView([42.3466, -71.0895], 13);
- 
-  L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnpqaW4iLCJhIjoiY2lyZ2Y2YzQwMDBhZGdlbm5jeWd4bW5xdiJ9.6focl_u481ea4df6CJg41w', {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      maxZoom: 14,
-      minZoom: 12,
-      id: 'your.mapbox.project.id',
-      accessToken: 'pk.eyJ1IjoiYnpqaW4iLCJhIjoiY2lyZ2Y2YzQwMDBhZGdlbm5jeWd4bW5xdiJ9.6focl_u481ea4df6CJg41w'
-  }).addTo(mymap);
+  var projection = d3.geo.conicConformal()
+    .parallels([41 + 43 / 60, 42 + 41 / 60])
+    .rotate([71 + 30 / 60, -41 ])
+    .scale([50000]) // N.B. The scale and translation vector were determined empirically.
+    .translate([40,1800]);
+    
+  var geoPath = d3.geo.path().projection(projection); 
 
+  var tractMap = d3.select("#map").append("svg")
+                .attr("width", "100%")
+                .attr("height", 650)
+
+  tractMap.selectAll(".tracts")
+      .data(topojson.feature(tracts, tracts.objects.tract_census_2).features)
+      .enter()
+      .append("path")
+        .attr("class", function(d) { return "t" + d.properties.TRACT; })
+        .attr("d", function(d) { return geoPath(d); })
+        .style("fill", "#ddd")
+        .style("opacity", function(d) { return d.properties.MINORITY_HH_PCT; })
 }
 
 CTPS.demoApp.generatePanel = function(source) {
   var routes = [];
 
   source.forEach(function(i){
-    if (!isNaN(i.Route)){ 
       routes.push("Route " + i.Route);
       i.Wdky_Riders = +i.Wdky_Riders;
       i.Minority_Percent = +i.Minority_Percent;
-    }
   })
 
-  var height = 2500; 
+  var height = 580; 
 
   var toggler = d3.select("#chart").append("svg")
                   .attr("width", "100%")
@@ -54,11 +63,11 @@ CTPS.demoApp.generatePanel = function(source) {
 
 
   var xScale = d3.scale.linear()
-              .domain([0, 1])
+              .domain([0, 100])
               .range([70, w - 50])
 
-  xScaleLength = d3.scale.linear()
-                    .domain([0, 1])
+  var xScaleLength = d3.scale.linear()
+                    .domain([0, 100])
                     .range([0, w - 120])
 
   var yScale = d3.scale.ordinal()
@@ -82,8 +91,8 @@ CTPS.demoApp.generatePanel = function(source) {
     .attr("class", "affected")
     .attr("x", xScale(0))
     .attr("y", 30)
-    .attr("width", xScaleLength(.475))
-    .attr("height", height - 85)
+    .attr("width", xScaleLength(47.5))
+    .attr("height", height - 65)
     .style("fill", "#ddd")
     .style("fill-opacity", .05)
 
@@ -196,7 +205,7 @@ function brushed() {
   d3.selectAll('#sliderRatio').text(d3.round(value, 2));
   d3.select('#sliderPercent').text(d3.round(value * 47.5, 2));
   d3.select('.affected')
-      .attr("width", xScaleLength(value * .475))
+      .attr("width", xScaleLength(value * 47.5))
 
   var minTotalSavings = 0; 
   var maxTotalSavings = 0; 
@@ -205,7 +214,7 @@ function brushed() {
   var comma = d3.format(",");
 
   source.forEach(function(i){ 
-    if (i.Minority_Percent < value * .475) {
+    if (i.Minority_Percent < value * 47.5) {
       d3.select("#routeNo")
         .append("text")
         .html("Rt " + i.Route + "<br>")
@@ -216,7 +225,7 @@ function brushed() {
 
       d3.select("#percentMin")
         .append("text")
-        .html(d3.round(i.Minority_Percent * 100) + "%<br>")
+        .html(d3.round(i.Minority_Percent) + "%<br>")
 
       d3.select("#minSavings")
         .append("text")
@@ -234,7 +243,7 @@ function brushed() {
 
     d3.select("#minTotSavings").text("$" + comma(parseInt(minTotalSavings)));
     d3.select("#maxTotSavings").text("$" + comma(parseInt(maxTotalSavings)));
-    d3.select("#globalMinority").text(d3.round(100 * totalPercent/totalPop, 1))
+    d3.select("#globalMinority").text(d3.round(totalPercent/totalPop, 1))
     d3.select("#globalPop").text(parseInt(totalPercent));
 
   })

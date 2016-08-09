@@ -36,8 +36,8 @@
 
 <div class="col-md-4" id="first-third">
 	<h1>Transitopia</h1>
-	<h2>The App</h2>
-	<p> Something about transportation equity outreach to underserved populations, etc, instructions about how to select routes and making sense of the results</p>
+	<h2>Minority Bus Routes</h2>
+	<p> How will budget cuts affect the minority population along these bus routes? What's the best way to take resources away while minimizing disparate impact? </p>
 	<div class="col-md-12" id="map"></div>
 </div>
 
