@@ -11,24 +11,181 @@ var geoPath = d3.geo.path().projection(projection);
 
 var comma = d3.format(",");
 
+var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+
+var drag = d3.behavior.drag()
+    .origin(function(d) { return d; })
+    .on("drag", dragmove);
+
+function dragmove(d) {
+  d3.select(this)
+  console.log(d3.event.x)
+      .attr("x", function(d) { return d.x = Math.min(vrhScale(-30), d3.event.x)})
+}
+
+
 //Using the queue.js library
 queue()
   .defer(d3.csv, "sourceTable.csv")
   .defer(d3.json, "tract_census.topojson")
+  .defer(d3.json, "routes.topojson")
 
   .awaitAll(function(error, results){ 
-    CTPS.demoApp.generateMap(results[1]);
+    CTPS.demoApp.generateMap(results[1], results[2]);
     CTPS.demoApp.generatePanel(results[0]);
     CTPS.demoApp.generateSavings(results[0]);
+
+    var globalVRH = 0; 
+    results[0].forEach(function(i){ globalVRH += +i.TotalHours; })
+
+    var minTotal = 0; 
+    var popTotal = 0; 
+    var vrhSavings = 0; 
+    var vrhSavingsTotal = 0; 
+
+    d3.selectAll(".selection").on("mouseover", function() { 
+      var routeName = this.getAttribute("class").split(" ")[0];
+      
+      d3.selectAll("." + routeName).filter("text")
+        .style("font-weight", 700)
+
+      d3.selectAll("." + routeName).filter(".routes")
+        .style("stroke", "orange")
+
+      d3.selectAll(".selection") 
+        .style("cursor", "pointer");
+    })
+
+    d3.selectAll(".selection").on("mouseout", function() { 
+      var routeName = this.getAttribute("class").split(" ")[0];
+      
+      d3.selectAll("." + routeName).filter("text")
+        .style("font-weight", 300)
+
+      d3.selectAll("." + routeName).filter(".routes")
+        .style("stroke", "#ddd")
+    })
+
+    d3.selectAll(".selection").on("click", function() { 
+      var routeName = this.getAttribute("class").split(" ")[0];
+      
+      d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName")
+        .style("font-weight", 700)
+        .style("fill", "orange")
+
+      d3.selectAll("." + routeName).filter(".routes")
+        .style("stroke-dasharray", "none")
+        .style("stroke", "orange")
+
+      var letterRef = routeName.split("e")[1];
+
+      results[0].forEach(function(i){
+        if (i.Route == letterRef) { 
+          minTotal += i.Wdky_Riders * i.Minority_Percent / 100;
+          popTotal += i.Wdky_Riders;
+        }
+      })
+
+      var didbRatio = (100 * minTotal / popTotal)/47.5;
+      d3.selectAll(".yourChange")
+        .attr("x", ratioScale(didbRatio));
+
+      d3.selectAll('#sliderRatio').text(d3.round(didbRatio, 2));
+
+      d3.selectAll('#aboveBelow')
+        .text(function() { 
+          if (didbRatio < brushValue) { return "below" }
+          else { return "above" }
+        })
+        .style("color", function() { 
+          if (didbRatio < brushValue) { return "green" }
+          else { return "red" }
+        })
+
+      d3.selectAll('#isNot')
+        .text(function() { 
+          if (didbRatio < brushValue) { return "is no" }
+          else { return "is" }
+        })
+       .style("color", function() { 
+          if (didbRatio < brushValue) { return "green" }
+          else { return "red" }
+        })
+
+      d3.select("#globalMinority").text(d3.round(100 * minTotal / popTotal, 0) + "%")
+      d3.select("#globalMinPop").text(d3.round(minTotal, 0) + " People");
+      d3.select("#globalPop").text(d3.round(popTotal, 0) + " People");
+
+    })
+
+    d3.selectAll(".vrhSlider").on("mouseover", function() { 
+      d3.selectAll(".vrhSlider").style("cursor", "pointer");
+
+      var routeName = this.getAttribute("class").split(" ")[0];
+      var routeChange = this.getAttribute("class").split(" ")[1];
+
+      d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
+        .style("stroke-width", 1)
+
+      d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
+        .style("fill", "orange")
+    })
+
+    d3.selectAll(".vrhSlider").on("mouseout", function() { 
+      console.log($(this).hasClass("clicked"))
+      if($(this).hasClass("clicked") == false){
+        var routeName = this.getAttribute("class").split(" ")[0];
+        var routeChange = this.getAttribute("class").split(" ")[1];
+      
+        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
+          .style("stroke-width", 0)
+
+        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
+          .style("fill", "none")
+      }
+    })
+
+     d3.selectAll(".vrhSlider").on("click", function() { 
+        var routeName = this.getAttribute("class").split(" ")[0];
+        var routeChange = this.getAttribute("class").split(" ")[1];
+        var letterRef = routeName.split("e")[1];
+        var percentRef = +routeChange.split("t")[1];
+
+        $(this).addClass("clicked");
+
+        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
+          .style("stroke-width", 1)
+
+        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
+          .style("fill", "orange")
+
+        results[0].forEach(function(i){
+          if (i.Route == letterRef) { 
+            vrhSavings += i.TotalHours * percentRef / 100;
+          }
+        })
+
+        d3.select("#vrhTotSavings").text(d3.round(100 * vrhSavings / globalVRH, 2) + "%")
+
+    })
+
+
   }); 
 
-CTPS.demoApp.generateMap = function(tracts) {  
+CTPS.demoApp.generateMap = function(tracts, routes) {  
+  var routes = topojson.feature(routes, routes.objects.select_routes_modified).features;
+
+  var index = 0; 
+  routes.forEach(function(i){ 
+    i.properties.letter = alphabet[index];
+    index++;
+  })
 
   var projection = d3.geo.conicConformal()
     .parallels([41 + 43 / 60, 42 + 41 / 60])
     .rotate([71 + 30 / 60, -41 ])
-    .scale([50000]) // N.B. The scale and translation vector were determined empirically.
-    .translate([40,1800]);
+    .scale([70000]) // N.B. The scale and translation vector were determined empirically.
+    .translate([-240,2450]);
     
   var geoPath = d3.geo.path().projection(projection); 
 
@@ -43,7 +200,73 @@ CTPS.demoApp.generateMap = function(tracts) {
         .attr("class", function(d) { return "t" + d.properties.TRACT; })
         .attr("d", function(d) { return geoPath(d); })
         .style("fill", "#ddd")
-        .style("opacity", function(d) { return d.properties.MINORITY_HH_PCT; })
+        .style("opacity", function(d) { return d.properties.MINORITY_HH_PCT/2; })
+
+  tractMap.selectAll(".routes")
+      .data(routes)
+      .enter()
+      .append("path")
+        .attr("class", function(d) { return "route" + d.properties.letter + " routes selection"})
+        .attr("d", function(d) { return geoPath(d); })
+        .style("stroke", "#ddd")
+        .style("fill", "none")
+        .style("stroke-width", 3)
+        .style("stroke-dasharray", "1, 2")
+        .style("opacity", 1)
+        .on("mouseenter", function(d){
+        })
+
+     //Color key
+    var xPos = 5;
+    var yPos = 40; 
+    var height = 600; 
+    //background
+    tractMap.append("text")
+      .style("font-weight", 700)
+      .attr("x", xPos).attr("y", yPos - 7)
+      .text("KEY");
+    tractMap.append("text")
+      .style("font-weight", 700)
+      .attr("x", xPos).attr("y", yPos + 7)
+      .text("% Minority Households");
+
+    //text and colors
+    tractMap.append("rect")
+      .style("fill", "#ddd").style("stroke", "none").style("opacity", .1)
+      .attr("x", xPos).attr("y", yPos + 15).attr("height", "7px").attr("width", height/35);
+    tractMap.append("text")
+      .style("font-weight", 300)
+      .attr("x", xPos + 25).attr("y", yPos + 22)
+      .text("20%");
+    tractMap.append("rect")
+      .style("fill", "#ddd").style("stroke", "none").style("opacity", .2)
+      .attr("x", xPos).attr("y", yPos + 30).attr("height", "7px").attr("width", height/35);
+    tractMap.append("text")
+      .style("font-weight", 300)
+      .attr("x", xPos + 25).attr("y", yPos + 37)
+      .text("40%");
+    tractMap.append("rect")
+      .style("fill", "#ddd").style("stroke", "none").style("opacity", .3)
+      .attr("x", xPos).attr("y", yPos + 45).attr("height", "7px").attr("width", height/35);
+    tractMap.append("text")
+      .style("font-weight", 300)
+      .attr("x", xPos + 25).attr("y", yPos + 52)
+      .text("60%");
+    tractMap.append("rect")
+      .style("fill", "#ddd").style("stroke", "none").style("opacity", .4)
+      .attr("x", xPos).attr("y", yPos + 60).attr("height", "7px").attr("width", height/35);
+    tractMap.append("text")
+      .style("font-weight", 300)
+      .attr("x", xPos + 25).attr("y", yPos + 67)
+      .text("80%");
+    tractMap.append("rect")
+      .style("fill", "#ddd").style("stroke", "none").style("opacity", .5)
+      .attr("x", xPos).attr("y", yPos + 75).attr("height", "7px").attr("width", height/35);
+    tractMap.append("text")
+      .style("font-weight", 300)
+      .attr("x", xPos + 25).attr("y", yPos + 82)
+      .text("100%");
+
 }
 
 CTPS.demoApp.generatePanel = function(source) {
@@ -55,7 +278,7 @@ CTPS.demoApp.generatePanel = function(source) {
       i.Minority_Percent = +i.Minority_Percent;
   })
 
-  var height = 480; 
+  var height = 500; 
 
   var toggler = d3.select("#chart").append("svg")
                   .attr("width", "100%")
@@ -66,35 +289,61 @@ CTPS.demoApp.generatePanel = function(source) {
 
   var xScale = d3.scale.linear()
               .domain([0, 100])
-              .range([120, w - 30])
+              .range([80, w - 30])
 
   var xScaleLength = d3.scale.linear()
                     .domain([0, 100])
-                    .range([0, w - 150])
+                    .range([0, w - 110])
 
   var yScale = d3.scale.ordinal()
               .domain(routes)
-              .rangePoints([35, height - 15])
+              .rangePoints([55, height - 15])
 
   var xAxis = d3.svg.axis().scale(xScale).orient("top").ticks(10);
-  var yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(-w + 100, 0, 0);
 
   toggler.append("g").attr("class", "x axis")
-    .attr("transform", "translate(0, 30)")
+    .attr("transform", "translate(0, 50)")
     .call(xAxis)
-  
-  toggler.append("g").attr("class", "axis")
-    .attr("transform", "translate(50, 5)")
-    .call(yAxis)
-    .selectAll("text")
-      .style("text-anchor", "middle")
+
+//Labelling
+var yPos = 20;
+
+  toggler.append("text")
+    .text("Route")
+    .attr("x", 25)
+    .attr("y", 10)
+    .style("text-anchor", "middle")
+
+  toggler.append("text")
+    .text("Name")
+    .attr("x", 25)
+    .attr("y", 30)
+    .style("text-anchor", "middle")
+
+  toggler.append("text")
+    .text("Percent Minority Ridership")
+    .attr("x", 260)
+    .attr("y", 15)
+    .style("text-anchor", "middle")
+
+//Graphing
+  toggler.selectAll(".letterLabel")
+    .data(source)
+    .enter()
+    .append("text")
+    .text(function(d) { return d.Route})
+    .attr("class", function(d) { return "route" + d.Route + " letterLabel selection"})
+    .attr("x", 15)
+    .attr("y", function(d) { return yScale(d.Route) + 10})
+    .style("fill", "#ddd")
+    .style("font-weight", 300)
 
   toggler.append("rect")
     .attr("class", "affected")
     .attr("x", xScale(0))
-    .attr("y", 30)
+    .attr("y", 55)
     .attr("width", xScaleLength(47.5))
-    .attr("height", height - 15)
+    .attr("height", height - 55)
     .style("fill", "#ddd")
     .style("fill-opacity", .05)
 
@@ -129,7 +378,7 @@ var margin = 20,
 
 
 // scale function
-var ratioScale = d3.scale.linear()
+ratioScale = d3.scale.linear()
   .domain([.7, 1.3])
   .range([0, width - 2 * margin])
   .clamp(true);
@@ -187,14 +436,18 @@ handle.append('text')
 slider
   .call(brush.event)
 
-function brushed() {
-  d3.select("#routeNo").selectAll("text").remove();
-  d3.select("#ridership").selectAll("text").remove();
-  d3.select("#percentMin").selectAll("text").remove();
-  d3.select("#minSavings").selectAll("text").remove();
-  d3.select("#maxSavings").selectAll("text").remove();
+slider.append("rect")
+    .attr("class", "yourChange")
+    .attr("x", ratioScale(0))
+    .attr("y", 0)
+    .attr("width", 3)
+    .attr("height", 20)
+    .style("fill", "orange")
+    .style("fill-opacity", 1)
 
+function brushed() {
   var value = brush.extent()[0];
+  brushValue = brush.extent()[0];
 
   if (d3.event.sourceEvent) { // not a programmatic event
     value = ratioScale.invert(d3.mouse(this)[0]);
@@ -204,27 +457,10 @@ function brushed() {
   handle.attr("transform", "translate(" + ratioScale(value) + ",0)");
   handle.select('text').text(d3.round(value, 2));
 
-  d3.selectAll('#sliderRatio').text(d3.round(value, 2));
   d3.select('#sliderPercent').text(d3.round(value * 47.5, 2));
+  d3.selectAll('.chosenSliderRatio').text(d3.round(value, 2));
   d3.select('.affected')
       .attr("width", xScaleLength(value * 47.5))
-
-  var minTotalSavings = 0; 
-  var maxTotalSavings = 0; 
-  var totalPercent = 0; 
-  var totalPop = 0; 
-
-  source.forEach(function(i){ 
-      minTotalSavings += +i.MinSavings20pctHrs; 
-      maxTotalSavings += +i.MaxSavings100pctHrs; 
-      totalPercent += i.Wdky_Riders * i.Minority_Percent;
-      totalPop += +i.Wdky_Riders;
-    })
-
-    d3.select("#minTotSavings").text("$" + comma(parseInt(minTotalSavings)));
-    d3.select("#maxTotSavings").text("$" + comma(parseInt(maxTotalSavings)));
-    d3.select("#globalMinority").text(d3.round(totalPercent/totalPop, 1))
-    d3.select("#globalPop").text(parseInt(totalPercent/100));
 
 }//end function brushed()
 
@@ -233,6 +469,7 @@ function brushed() {
 
 
 CTPS.demoApp.generateSavings = function(source) {
+
   var routes = [];
 
   source.forEach(function(i){
@@ -241,7 +478,7 @@ CTPS.demoApp.generateSavings = function(source) {
       i.Minority_Percent = +i.Minority_Percent;
   })
 
-  var height = 480; 
+  var height = 550; 
 
   var toggler = d3.select("#tableRows").append("svg")
                   .attr("width", "100%")
@@ -260,35 +497,150 @@ CTPS.demoApp.generateSavings = function(source) {
 
   var yScale = d3.scale.ordinal()
               .domain(routes)
-              .rangePoints([15, height - 35])
+              .rangePoints([55, height - 15])
 
   var yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(-w + 100, 0, 0);
   
-  toggler.append("g").attr("class", "axis")
-    .attr("transform", "translate(20, -5)")
-    .call(yAxis)
-    .selectAll("text")
+  //Labelling
+   toggler.append("text")
+    .text("Route")
+    .attr("x", 20)
+    .attr("y", 10)
+    .style("text-anchor", "middle")
+
+  toggler.append("text")
+    .text("Name")
+    .attr("x", 20)
+    .attr("y", 30)
+    .style("text-anchor", "middle")
+
+  toggler.append("text")
+    .text("Total")
+    .attr("x", 80)
+    .attr("y", 10)
+    .style("text-anchor", "middle")
+
+  toggler.append("text")
+    .text("Ridership")
+    .attr("x", 80)
+    .attr("y", 30)
+    .style("text-anchor", "middle")
+
+  toggler.append("text")
+    .text("% Minority")
+    .attr("x", 150)
+    .attr("y", 10)
+    .style("text-anchor", "middle")
+
+  toggler.append("text")
+    .text("Ridership")
+    .attr("x", 150)
+    .attr("y", 30)
+    .style("text-anchor", "middle")
+
+  toggler.append("text")
+    .text("Vehicle Revenue Hours")
+    .attr("x", 350)
+    .attr("y", 10)
+    .style("text-anchor", "middle")
+
+  //Filling in the table
+  toggler.selectAll(".letterName")
+    .data(source)
+    .enter()
+    .append("text")
+      .attr("class", function(d) { return "route" + d.Route + " letterName selection"})
+      .attr("x", 10)
+      .attr("y", function(d) { return yScale(d.Route); })
+      .attr("fill", "#ddd")
+      .text(function(d) { return d.Route; })
       .style("text-anchor", "middle")
+
 
   toggler.selectAll(".numRiders")
     .data(source)
     .enter()
     .append("text")
-      .attr("class", "numRiders")
-      .attr("x", 90)
+      .attr("class", function(d) { return "route" + d.Route + " numRiders selection"})
+      .attr("x", 100)
       .attr("y", function(d) { return yScale(d.Route); })
       .attr("fill", "#ddd")
       .text(function(d) { return comma(d.Wdky_Riders); })
-      .style("text-anchor", "middle")
+      .style("text-anchor", "end")
 
   toggler.selectAll(".minPercent")
     .data(source)
     .enter()
     .append("text")
-      .attr("class", "minPercent")
-      .attr("x", 160)
+      .attr("class", function(d) { return "route" + d.Route + " minPercent selection"})
+      .attr("x", 165)
       .attr("y", function(d) { return yScale(d.Route); })
       .attr("fill", "#ddd")
       .text(function(d) { return comma(d.Minority_Percent) + "%"; })
-      .style("text-anchor", "middle")
+      .style("text-anchor", "end")
+
+  vrhScale = d3.scale.linear()
+              .domain([-30, 30])
+              .range([200, w - 30])
+
+  vrhScaleLabels = d3.scale.ordinal()
+              .domain(["-30%", "-25%","-20%","-15%","-10%","-5%","0%","+5%","+10%","+15%","+20%","+25%","+30%",])
+              .rangePoints([190, w - 30])
+
+  var vrhScaleLength = d3.scale.linear()
+                    .domain([0, 60])
+                    .range([0, w - 230])
+
+  var vrhAxis = d3.svg.axis().scale(vrhScaleLabels).orient("top");
+
+  toggler.append("g").attr("class", "x axis")
+    .attr("transform", "translate(12, 35)")
+    .call(vrhAxis)
+    .selectAll("text")
+      .style("font-size", 8)
+
+  for (var i = -30; i < 31; i += 5){
+    toggler.selectAll("vrhSlider")
+      .data(source)
+      .enter()
+      .append("rect")
+        .attr("class", function(d) { return "route" + d.Route + " " + "percent" + i + " vrhSlider selection"})
+        .attr("x", vrhScale(i))
+        .attr("y", function(d) { return yScale(d.Route); })
+        .style("fill", "#ddd")
+        .style("stroke", "orange")
+        .style("stroke-width", function() { 
+          if (i == 0 ) { return 1 }
+          else { return 0; }
+        })
+        .attr("width", 20)
+        .attr("height", 5)
+        .style("fill-opacity", 1 - 2.5 * Math.abs((i+1)/100))
+
+    toggler.selectAll("vrhText")
+      .data(source)
+      .enter()
+      .append("text")
+        .attr("class", function(d) { 
+          if (i == 0 ) { 
+            return "route" + d.Route + " " + "percent" + i + " vrhSlider selection clicked";
+          } else { 
+            return "route" + d.Route + " " + "percent" + i + " vrhSlider selection";
+          }
+        })
+        .attr("x", vrhScale(i) + 10)
+        .attr("y", function(d) { return yScale(d.Route) - 4; })
+        .style("fill", function() { 
+          if (i == 0 ) { return "#ddd" }
+          else { return "none"; }
+        }) 
+        .text(function(d) { return d3.round(d.TotalHours - (- d.TotalHours * i / 100)) + " hrs"; })
+        .style("font-size", 8)
+        .style("text-anchor", "middle")
+  }
+
+    
 }
+
+
+

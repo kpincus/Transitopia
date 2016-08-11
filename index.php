@@ -63,36 +63,26 @@
 	<p>  Choose a target disparate ratio to keep in mind while selecting proposed service changes. <br> 
 	Current weighted systemwide bus minority percentage: <span> 47.5% </span> </p>
 	<div class="col-md-12" id="slider"></div>
-	<p>You chose a threshold of <span id="sliderRatio"> 1.0 </span>, which <b> ideally should </b> limit affected bus routes to only those with up to <span id="sliderPercent"> 47.5 </span> % minority ridership.<br><br></p>
+	<p>You chose a threshold of <span class="chosenSliderRatio"> 1.0 </span>, which <b> ideally should </b> limit affected bus routes to only those with up to <span id="sliderPercent"> 47.5 </span> % minority ridership.<br><br></p>
 	<h2> 2) Choosing affected bus routes </h2>
 	<p> Choose bus routes from which to add or cut services. Your selections will appear highlighted on the right-most panel, as well as on the map.</p><br>
-	<div class="col-md-12" id="routePercents">
-		<h4 class="col-md-3">Route Name</h4>
-		<h4 class="col-md-9">Route Minority Ridership Percentage</h4>
-	</div>
 	<div class="col-md-12" id="chart"></div>
 </div>
 
 <div class="col-md-4" id="calculations">
 	<h2> 3) Allocating Spending and Saving </h2>
-	<h2>Your Target: <span id="target-savings">300</span></h2>
-	<h4>Vehicle Revenue Hours (VRH) saved per day</h4>
-	<br>
-	<p> The bus routes that you selected are highlighted below. You can change the extent to which each bus route is affected by dragging each slider to save more or less vehicle revenue hours.</p>
+	<h2>Your Target: <span id="target-savings">-5%</span></h2>
+	<h4>total Vehicle Revenue Hours (VRH) per day</h4>
 	<br>
 
-	<h3 class="lowercase"> Your Current Policy Threshold Ratio: <span id="sliderRatio" class="highlighted"> 1.0 </span> </h3>
-	<h3 class="lowercase"> Your Current Calculated VRH Savings: <span id="minTotSavings" class="highlighted"> 0 </span></h3>
+	<h3 class="lowercase"> Your Current Calculated VRH Savings: <span id="vrhTotSavings" class="highlighted"> 0 </span></h3>
+	<h3 class="lowercase"> Your Current Calculated Disparate Impact Ratio: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>
+	<p> This is <span id="aboveBelow"> below </span> your chosen threshold policy ratio of <span class="chosenSliderRatio"> 1.0 </span>, so there <span id="isNot"> is no</span> disparate impact.</p>
+
 	<br>
 	<h4 class="lowercase"> Systemwide % Minority Affected: <span id="globalMinority" class="highlighted"> 0%</span></h4>
-	<h4 class="lowercase"> Systemwide # Minorities Affected: <span id="globalPop" class="highlighted"> 0 people</span></h4>
-
-	<div class="col-md-12" id="tableNames">
-		<h4 class="col-md-2">Route Name</h4>
-		<h4 class="col-md-2">Weekday Ridership</h4>
-		<h4 class="col-md-2">Percent Minority</h4>
-		<h4 class="col-md-6">Vehicle Revenue Hours</h4>
-	</div>
+	<h4 class="lowercase"> Systemwide # Minorities Affected: <span id="globalMinPop" class="highlighted"> 0 people</span></h4>
+	<h4 class="lowercase"> Systemwide # Riders Affected: <span id="globalPop" class="highlighted"> 0 people</span></h4>
 	<div class="col-md-12" id="tableRows"></div>
 
 </div>
