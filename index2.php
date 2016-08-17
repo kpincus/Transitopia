@@ -51,8 +51,8 @@
 <div class="col-md-4" id="first-third">
 	<h2 class="subtitle"> Choosing Affected Bus Routes </h2>
 	<p>Choose which factor you would like to consider per bus route. Your current factor is highlighted: </p><br>
-	<h4><a href="#" class="active"> Routes by Percent Minority Ridership </a></h4>
-	<h4><a href="index2.php"> Routes by Percent Low Income Ridership</a></h4>
+	<h4><a href="index.php"> Routes by Percent Minority Ridership </a></h4>
+	<h4><a href="#" class="active"> Routes by Percent Low Income Ridership</a></h4>
 	<br>
 	<p>Select your own routes and disparate impact/benefit ratios to discover how budgetting decisions might be made. You can start by clicking bus routes on the map.</p>
 	<div class="col-md-12" id="map"></div>
@@ -61,9 +61,9 @@
 <div class="col-md-8">
 	<div class="col-md-5" id="second-third">
 		<h2 class="subtitle"> Choosing a target DI Ratio </h2>
-		<p> Currently, <span class="subtitle"> 47.5% </span> of all bus riders are minorities. Choose a target DI ratio: </p>
+		<p> Currently, <span class="subtitle"> 47.5% </span> of all bus riders are low income. Choose a target DI ratio: </p>
 		<div class="col-md-12" id="slider"></div>
-		<p>You chose a threshold of <span class="chosenSliderRatio subtitle"> 1.0 </span>, which <b> ideally should </b> limit affected bus routes to only those with up to <span id="sliderPercent" class="subtitle"> 47.5</span>%  minority ridership.<br><br></p>
+		<p>You chose a threshold of <span class="chosenSliderRatio subtitle"> 1.0 </span>, which <b> ideally should </b> limit affected bus routes to only those with up to <span id="sliderPercent" class="subtitle"> 47.5</span>%  low income ridership.<br><br></p>
 		<div class="col-md-12" id="chart"></div>
 	</div>
 
@@ -78,8 +78,8 @@
 		<p> This is <span id="aboveBelow"> below </span> your chosen threshold policy ratio of <span class="chosenSliderRatio"> 1.0 </span>, so there <span id="isNot"> is no</span> disparate impact.</p>
 
 		<br>
-		<h4 class="lowercase"> Systemwide % Minority Affected: <span id="globalMinority" class="highlighted"> 0%</span></h4>
-		<h4 class="lowercase"> Systemwide # Minorities Affected: <span id="globalMinPop" class="highlighted"> 0 people</span></h4>
+		<h4 class="lowercase"> Systemwide % Low Income Affected: <span id="globalMinority" class="highlighted"> 0%</span></h4>
+		<h4 class="lowercase"> Systemwide # Low Income Affected: <span id="globalMinPop" class="highlighted"> 0 people</span></h4>
 		<h4 class="lowercase"> Systemwide # Riders Affected: <span id="globalPop" class="highlighted"> 0 people</span></h4>
 		<div class="col-md-12" id="tableRows"></div>
 	</div>
@@ -87,7 +87,7 @@
 
 </div> 
 
-<script src="app.js"></script>
+<script src="app2.js"></script>
 <script src="slider.js"></script>
 
 </body>

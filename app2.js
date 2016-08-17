@@ -21,7 +21,7 @@ var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
   .html(function(d) {
-    return d.Minority_Percent + "%" ;
+    return d.LI_Percent + "%" ;
   })
 
 var tipRoute = d3.tip()
@@ -116,7 +116,7 @@ queue()
 
           results[0].forEach(function(i){
             if (i.Route == letterRef) { 
-              minTotal += i.Wdky_Riders * i.Minority_Percent / 100;
+              minTotal += i.Wdky_Riders * i.LI_Percent / 100;
               popTotal += i.Wdky_Riders;
             }
           })
@@ -139,7 +139,7 @@ queue()
 
           results[0].forEach(function(i){
             if (i.Route == letterRef) { 
-              minTotal -= i.Wdky_Riders * i.Minority_Percent / 100;
+              minTotal -= i.Wdky_Riders * i.LI_Percent / 100;
               popTotal -= i.Wdky_Riders;
             }
           })
@@ -293,7 +293,7 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
         .attr("class", function(d) { return "t" + d.properties.TRACT; })
         .attr("d", function(d) { return geoPath(d); })
         .style("fill", "#ddd")
-        .style("opacity", function(d) { return d.properties.MINORITY_HH_PCT/2; })
+        .style("opacity", function(d) { return d.properties.LOW_INC_HH_PCT/2; })
 
   tractMap.selectAll(".routes")
       .data(routes)
@@ -321,7 +321,7 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
     tractMap.append("text")
       .style("font-weight", 700)
       .attr("x", xPos).attr("y", yPos + 7)
-      .text("% Minority Households");
+      .text("% Low Income Households");
 
     //text and colors
     tractMap.append("rect")
@@ -368,7 +368,7 @@ CTPS.demoApp.generatePanel = function(source) {
   source.forEach(function(i){
       routes.push(i.Route);
       i.Wdky_Riders = +i.Wdky_Riders;
-      i.Minority_Percent = +i.Minority_Percent;
+      i.LI_Percent = +i.LI_Percent;
       i.Selected = 0;
   })
 
@@ -411,7 +411,7 @@ var yPos = 55;
     .style("font-weight", 300)
 
   toggler.append("text")
-    .text("Percent Minority Ridership")
+    .text("Percent Low Income Ridership")
     .attr("x", 210)
     .attr("y", yPos + 20)
     .style("text-anchor", "middle")
@@ -434,7 +434,7 @@ toggler.append("text")
     .style("font-size", 10)
 
 toggler.append("text")
-    .text("% Minority")
+    .text("% Low Income")
     .attr("x", 145)
     .attr("y", yPos - 43)
     .style("font-weight", 300)
@@ -496,10 +496,10 @@ toggler.call(tip);
     .enter()
     .append("rect")
       .attr("class", function(d) { return "route" + d.Route + " minorityChart";})
-      .attr("x", function(d) { return xScale(d.MIN_90pct_Lower); })
+      .attr("x", function(d) { return xScale(d.LI_90pct_Lower); })
       .attr("y", function(d) { return yScale(d.Route); })
       .attr("height", 10)
-      .attr("width", function(d) { return xScaleLength(d.MIN_90pct_Upper - d.MIN_90pct_Lower); })
+      .attr("width", function(d) { return xScaleLength(d.LI_90pct_Upper - d.LI_90pct_Lower); })
       .style("fill-opacity", .1)
       .style("fill", "#ddd")
       .style("stroke-width", 1)
@@ -507,13 +507,13 @@ toggler.call(tip);
       .on("mouseenter", function(d) { tip.show(d); })
       .on("mouseout", function(d) { tip.hide(d); })
 
-//graph minority percentage (white bar)
+//graph Low Income percentage (white bar)
   toggler.selectAll(".minorityPercent")
     .data(source)
     .enter()
     .append("rect")
       .attr("class", function(d) { return "route" + d.Route + " minorityChart";})
-      .attr("x", function(d) { return xScale(d.Minority_Percent); })
+      .attr("x", function(d) { return xScale(d.LI_Percent); })
       .attr("y", function(d) { return yScale(d.Route); })
       .attr("height", 10)
       .attr("width", 2)
@@ -625,7 +625,7 @@ CTPS.demoApp.generateSavings = function(source) {
   source.forEach(function(i){
       routes.push(i.Route);
       i.Wdky_Riders = +i.Wdky_Riders;
-      i.Minority_Percent = +i.Minority_Percent;
+      i.LI_Percent = +i.LI_Percent;
   })
 
   var height = 550; 
@@ -672,7 +672,7 @@ CTPS.demoApp.generateSavings = function(source) {
     .style("text-anchor", "middle")
 
   toggler.append("text")
-    .text("% Minority")
+    .text("% Low Income")
     .attr("x", 150)
     .attr("y", yLabel)
     .style("text-anchor", "middle")
@@ -722,7 +722,7 @@ CTPS.demoApp.generateSavings = function(source) {
       .attr("x", 165)
       .attr("y", function(d) { return yScale(d.Route); })
       .attr("fill", "#ddd")
-      .text(function(d) { return comma(d.Minority_Percent) + "%"; })
+      .text(function(d) { return comma(d.LI_Percent) + "%"; })
       .style("text-anchor", "end")
 
   vrhScale = d3.scale.ordinal()

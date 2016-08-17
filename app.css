@@ -80,6 +80,18 @@ text { fill: white; }
   text-align: center;
   font-size: 18px;
 }
+
+
+.d3-tip {
+  line-height: 1;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-weight: 100;
+  font-size: 12px;
+  border-radius: 2px;
+}
+
 /* Div element styling */ 
 
 #routePercents { 
@@ -130,6 +142,25 @@ path.routes:hover {
   stroke-width: 3px;
  }
 
+.subtitle { 
+  color: orange;
+ }
+
+a { 
+  color: white;
+  font-weight: 300;
+  text-transform: none;
+  opacity: .5;
+}
+a:hover, a:focus, a:active, a.active { 
+  text-decoration: none;
+  color: orange;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+
 /*These elements are only visible to screen readers*/
 .accessible
 { 
@@ -140,4 +171,5 @@ path.routes:hover {
   height:1px;
   overflow:hidden;
 }
+
 
