@@ -93,6 +93,13 @@ text { fill: white; }
 }
 
 /* Div element styling */ 
+#summary { 
+  text-align: right;
+}
+
+#summary h3 { 
+  font-size: 32px;
+}
 
 #routePercents { 
   overflow: visible;
@@ -144,6 +151,7 @@ path.routes:hover {
 
 .subtitle { 
   color: orange;
+  text-decoration: underline;
  }
 
 a { 

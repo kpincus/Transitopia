@@ -35,7 +35,7 @@
 <div id="container" class="col-md-12 container-fluid">
 <div class="col-md-12">
 <h1>Transitopia</h1>
-<div class="col-md-8">
+<div class="col-md-7">
 <h2> Context </h2>
 <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br><br>
 </p>
@@ -46,45 +46,41 @@
 <p><b> Vehice Revenue Hours: </b></p>
 <br>
 </div>
+<div class="col-md-5" id="summary">
+	<h2 class="subtitle">Analysis Summary</h2>
+	<h3 class="lowercase"> Disparate Impact Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>
+	<h3 class="lowercase"> Disparate Impact Ratio: <span id="calculatedRatio" class="highlighted"> 0 </span> </h3>
+	<h3 class="lowercase"> Result: <span id="isThereImpact" class="highlighted"> </span> </h3>
+</div>
 </div>
 
+
 <div class="col-md-4" id="first-third">
-	<h2 class="subtitle"> Choosing Affected Bus Routes </h2>
-	<p>Choose which factor you would like to consider per bus route. Your current factor is highlighted: </p><br>
+	<h2 class="subtitle">Select Analysis Type</h2>
+	
 	<h4><a href="#" class="active"> Routes by Percent Minority Ridership </a></h4>
 	<h4><a href="index2.php"> Routes by Percent Low Income Ridership</a></h4>
-	<br>
-	<p>Select your own routes and disparate impact/benefit ratios to discover how budgetting decisions might be made. You can start by clicking bus routes on the map.</p>
+
 	<div class="col-md-12" id="map"></div>
 </div>
 
 <div class="col-md-8">
 	<div class="col-md-5" id="second-third">
-		<h2 class="subtitle"> Choosing a target DI Ratio </h2>
-		<p> Currently, <span class="subtitle"> 47.5% </span> of all bus riders are minorities. Choose a target DI ratio: </p>
+		<h2 class="subtitle"> Set Disparate Impact Threshold </h2>
 		<div class="col-md-12" id="slider"></div>
-		<p>You chose a threshold of <span class="chosenSliderRatio subtitle"> 1.0 </span>, which <b> ideally should </b> limit affected bus routes to only those with up to <span id="sliderPercent" class="subtitle"> 47.5</span>%  minority ridership.<br><br></p>
 		<div class="col-md-12" id="chart"></div>
 	</div>
 
 	<div class="col-md-7" id="calculations">
-		<h2 class="subtitle"> Allocating Service Hours </h2>
-		<h2>Your Target: <span id="target-savings">-5%</span></h2>
-		<h4>total Vehicle Revenue Hours (VRH) per day</h4>
-		<br>
-
-		<h3 class="lowercase"> Your Current Calculated VRH Savings: <span id="vrhTotSavings" class="highlighted"> 0 </span></h3>
-		<h3 class="lowercase"> Your Current Calculated Disparate Impact Ratio: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>
-		<p> This is <span id="aboveBelow"> below </span> your chosen threshold policy ratio of <span class="chosenSliderRatio"> 1.0 </span>, so there <span id="isNot"> is no</span> disparate impact.</p>
-
-		<br>
-		<h4 class="lowercase"> Systemwide % Minority Affected: <span id="globalMinority" class="highlighted"> 0%</span></h4>
-		<h4 class="lowercase"> Systemwide # Minorities Affected: <span id="globalMinPop" class="highlighted"> 0 people</span></h4>
-		<h4 class="lowercase"> Systemwide # Riders Affected: <span id="globalPop" class="highlighted"> 0 people</span></h4>
+		<h2 class="subtitle"> Adjust Service Hours by Route</h2><br>
+		<h2> Change in Total Service Hours </h2>
+		<h2 class="lowercase">Task: <span id="target-savings">-5%</span></h2>
+		<h2 class="lowercase">Current: <span id="vrhTotSavings" class="highlighted"> 0 </span></h2><br>
 		<div class="col-md-12" id="tableRows"></div>
+
 	</div>
 </div>
-
+	
 </div> 
 
 <script src="app.js"></script>

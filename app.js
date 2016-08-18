@@ -93,90 +93,6 @@ queue()
       }
     })
 
-    //Clicking on bus routes on map and on chart 
-    d3.selectAll(".selection").on("click", function() { 
-        var routeName = this.getAttribute("class").split(" ")[0];
-
-       if($(this).hasClass("clicked") == false){       //If not previously selected3
-          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName")
-            .style("font-weight", 700)
-            .style("fill", "orange")
-            .classed("clicked", true);
-
-          d3.selectAll("." + routeName).filter(".routes")
-            .style("stroke-dasharray", "none")
-            .style("stroke", "orange")
-            .classed("clicked", true);
-
-          d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", "orange")
-              .classed("clicked", true);
-
-          var letterRef = routeName.split("e")[1];
-
-          results[0].forEach(function(i){
-            if (i.Route == letterRef) { 
-              minTotal += i.Wdky_Riders * i.Minority_Percent / 100;
-              popTotal += i.Wdky_Riders;
-            }
-          })
-        } else { // If previously already selected
-            d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName")
-            .style("font-weight", 300)
-            .style("fill", "#ddd")
-            .classed("clicked", false);
-
-          d3.selectAll("." + routeName).filter(".routes")
-            .style("stroke-dasharray", "1, 2")
-            .style("stroke", "#ddd")
-            .classed("clicked", false);
-
-          d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", "#ddd")
-              .classed("clicked", false);
-
-          var letterRef = routeName.split("e")[1];
-
-          results[0].forEach(function(i){
-            if (i.Route == letterRef) { 
-              minTotal -= i.Wdky_Riders * i.Minority_Percent / 100;
-              popTotal -= i.Wdky_Riders;
-            }
-          })
-        }
-
-        //Update front-end numbers
-        var didbRatio = (100 * minTotal / (popTotal + .01))/47.5;
-          d3.selectAll(".yourChange")
-            .attr("x", ratioScale(didbRatio));
-
-          d3.selectAll('#sliderRatio').text(d3.round(didbRatio, 2));
-
-          d3.selectAll('#aboveBelow')
-            .text(function() { 
-              if (didbRatio < brushValue) { return "below" }
-              else { return "above" }
-            })
-            .style("color", function() { 
-              if (didbRatio < brushValue) { return "green" }
-              else { return "red" }
-            })
-
-          d3.selectAll('#isNot')
-            .text(function() { 
-              if (didbRatio < brushValue) { return "is no" }
-              else { return "is" }
-            })
-           .style("color", function() { 
-              if (didbRatio < brushValue) { return "green" }
-              else { return "red" }
-            })
-
-          d3.select("#globalMinority").text(d3.round(100 * minTotal / (popTotal + .01), 0) + "%")
-          d3.select("#globalMinPop").text(d3.round(minTotal, 0) + " People");
-          d3.select("#globalPop").text(d3.round(popTotal, 0) + " People");
-
-    }) //end select(".selection") for routes
 
     d3.selectAll(".vrhSlider").on("mouseover", function() { 
       if($(this).hasClass("clicked") == false){
@@ -214,6 +130,31 @@ queue()
         var percentRef = +routeChange.split("t")[1];
 
         if ( $(this).hasClass("clicked") == false) {
+          //highlight appropriate bus routes on map and on text
+          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName")
+            .style("font-weight", 700)
+            .style("fill", "orange")
+            .classed("clicked", true);
+
+          d3.selectAll("." + routeName).filter(".routes")
+            .style("stroke-dasharray", "none")
+            .style("stroke", "orange")
+            .classed("clicked", true);
+
+          d3.selectAll("." + routeName).filter(".minorityChart")
+              .style("fill", "orange")
+              .classed("clicked", true);
+
+          var letterRef = routeName.split("e")[1];
+
+          results[0].forEach(function(i){
+            if (i.Route == letterRef) { 
+              minTotal += i.Wdky_Riders * i.Minority_Percent / 100;
+              popTotal += i.Wdky_Riders;
+            }
+          })
+
+          //highlight appropriate VRH rectangles
             d3.selectAll("." + routeName).filter(".vrhSlider").filter("rect")
               .style("stroke-width", 0)
               .classed("clicked", false)
@@ -240,6 +181,31 @@ queue()
             d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
                 .classed("clicked", true)
         } else {
+          //highlight bus routes and text
+          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName")
+            .style("font-weight", 300)
+            .style("fill", "#ddd")
+            .classed("clicked", false);
+
+          d3.selectAll("." + routeName).filter(".routes")
+            .style("stroke-dasharray", "1, 2")
+            .style("stroke", "#ddd")
+            .classed("clicked", false);
+
+          d3.selectAll("." + routeName).filter(".minorityChart")
+              .style("fill", "#ddd")
+              .classed("clicked", false);
+
+          var letterRef = routeName.split("e")[1];
+
+          results[0].forEach(function(i){
+            if (i.Route == letterRef) { 
+              minTotal -= i.Wdky_Riders * i.Minority_Percent / 100;
+              popTotal -= i.Wdky_Riders;
+            }
+          })
+
+          //highlight appropriate VRH rectangles
           d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
             .style("stroke-width", 0)
 
@@ -258,6 +224,19 @@ queue()
         }
         
         d3.select("#vrhTotSavings").text(d3.round(100 * vrhSavings / globalVRH, 2) + "%")
+      //Update front-end numbers
+        var diRatio = (100 * minTotal / (popTotal + .01))/47.5;
+
+        d3.selectAll(".yourChange")
+          .attr("x", ratioScale(diRatio));
+
+        d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2));
+
+        d3.selectAll('#isThereImpact')
+          .text(function() { 
+            if (diRatio < brushValue) { return "No Disparate Impact" }
+            else { return "Disparate Impact" }
+          })
     })
 
 
@@ -607,8 +586,7 @@ function brushed() {
   handle.attr("transform", "translate(" + ratioScale(value) + ",0)")
   handle.select('text').text(d3.round(value, 2));
 
-  d3.select('#sliderPercent').text(d3.round(value * 47.5, 2));
-  d3.selectAll('.chosenSliderRatio').text(d3.round(value, 2));
+  d3.select("#sliderRatio").text(d3.round(value, 2));
   d3.select('.affected')
       .attr("width", xScaleLength(value * 47.5))
 
