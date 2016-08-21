@@ -7,18 +7,18 @@
 }
 
 html{ 
-  background-color: #191b1d; 
+  background-color: black; 
 }
 
 body {
-  background-color: #191b1d; 
+  background-color: black; 
   margin: 0;
   color: #ddd;
   padding: 20px;
 }
 
 div {
-  background-color: #191b1d; 
+  background-color: none; 
   margin: 0;
   padding: 0;
   float: left;
@@ -49,7 +49,7 @@ p {
 }
 
 /* D3 elements styling */
-#map { height: 600px; padding: 10px; }
+#map { height: 600px; padding-top: 20px; }
 text { fill: white; }
 .axis { fill: none; }
 .axis text { fill: white; font-weight: 300; }
@@ -93,12 +93,10 @@ text { fill: white; }
 }
 
 /* Div element styling */ 
-#summary { 
-  text-align: right;
-}
 
-#summary h3 { 
-  font-size: 32px;
+
+#summary #calculatedRatio, #summary #sliderRatio{ 
+  font-size: 28px;
 }
 
 #routePercents { 
@@ -156,13 +154,13 @@ path.routes:hover {
 
 a { 
   color: white;
-  font-weight: 300;
   text-transform: none;
   opacity: .5;
+
 }
 a:hover, a:focus, a:active, a.active { 
   text-decoration: none;
-  color: orange;
+  color: #dd3497;
   font-weight: 700;
   text-transform: uppercase;
   opacity: 1;

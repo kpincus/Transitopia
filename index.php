@@ -46,21 +46,16 @@
 <p><b> Vehice Revenue Hours: </b></p>
 <br>
 </div>
-<div class="col-md-5" id="summary">
-	<h2 class="subtitle">Analysis Summary</h2>
-	<h3 class="lowercase"> Disparate Impact Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>
-	<h3 class="lowercase"> Disparate Impact Ratio: <span id="calculatedRatio" class="highlighted"> 0 </span> </h3>
-	<h3 class="lowercase"> Result: <span id="isThereImpact" class="highlighted"> </span> </h3>
-</div>
+
 </div>
 
 
 <div class="col-md-4" id="first-third">
 	<h2 class="subtitle">Select Analysis Type</h2>
-	
-	<h4><a href="#" class="active"> Routes by Percent Minority Ridership </a></h4>
-	<h4><a href="index2.php"> Routes by Percent Low Income Ridership</a></h4>
-
+	<br>
+	<h3><a href="#" class="choiceMinority active"> Routes by Percent Minority Ridership </a></h3>
+	<h3><a href="index2.php" class="choiceLowIncome"> Routes by Percent Low Income Ridership</a></h3>
+	<br>
 	<div class="col-md-12" id="map"></div>
 </div>
 
@@ -72,10 +67,18 @@
 	</div>
 
 	<div class="col-md-7" id="calculations">
-		<h2 class="subtitle"> Adjust Service Hours by Route</h2><br>
-		<h2> Change in Total Service Hours </h2>
-		<h2 class="lowercase">Task: <span id="target-savings">-5%</span></h2>
-		<h2 class="lowercase">Current: <span id="vrhTotSavings" class="highlighted"> 0 </span></h2><br>
+		<div class="col-md-6">
+			<h2 class="subtitle"> Adjust Service Hours by Route</h2><br>
+			<h3 class="lowercase"> Change in Total Service Hours </h3>
+			<h2 class="lowercase">Task: <span id="target-savings">-5%</span></h2>
+			<h2 class="lowercase">Current: <span id="vrhTotSavings" class="highlighted"> 0 </span></h2><br>
+		</div>
+		<div class="col-md-6" id="summary">
+			<h2 class="subtitle">Analysis Summary</h2>
+			<h3 class="lowercase"> Disparate Impact Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>
+			<h3 class="lowercase"> Disparate Impact Ratio: <span id="calculatedRatio" class="highlighted"> 0 </span> </h3>
+			<h3 class="lowercase"> Result: <span id="isThereImpact" class="highlighted"> </span> </h3>
+		</div>
 		<div class="col-md-12" id="tableRows"></div>
 
 	</div>
