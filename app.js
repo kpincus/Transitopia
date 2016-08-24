@@ -277,7 +277,7 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
       .append("path")
         .attr("class", function(d) { return "t" + d.properties.TRACT; })
         .attr("d", function(d) { return geoPath(d); })
-        .style("fill", "black")
+        .style("fill", "#EE4000")
         .style("opacity",  function(d) { return Math.sqrt(d.properties.MINORITY_HH_PCT);})
 
   tractMap.selectAll(".routes")
@@ -309,35 +309,35 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
 
     //text and colors
     tractMap.append("rect")
-      .style("fill", "black").style("stroke", "none").style("opacity", .39)
+      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .39)
       .attr("x", xPos).attr("y", yPos + 15).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 22)
       .text("15%");
     tractMap.append("rect")
-      .style("fill", "black").style("stroke", "none").style("opacity", .55)
+      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .55)
       .attr("x", xPos).attr("y", yPos + 30).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 37)
       .text("30%");
     tractMap.append("rect")
-      .style("fill", "black").style("stroke", "none").style("opacity", .67)
+      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .67)
       .attr("x", xPos).attr("y", yPos + 45).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 52)
       .text("45%");
     tractMap.append("rect")
-      .style("fill", "black").style("stroke", "none").style("opacity", .76)
+      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .76)
       .attr("x", xPos).attr("y", yPos + 60).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 67)
       .text("60%");
     tractMap.append("rect")
-      .style("fill", "black").style("stroke", "none").style("opacity", .85)
+      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .85)
       .attr("x", xPos).attr("y", yPos + 75).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
