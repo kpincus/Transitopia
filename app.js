@@ -260,14 +260,14 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
   var projection = d3.geo.conicConformal()
     .parallels([41 + 43 / 60, 42 + 41 / 60])
     .rotate([71 + 30 / 60, -41 ])
-    .scale([70000]) // N.B. The scale and translation vector were determined empirically.
-    .translate([-240,2450]);
+    .scale([60000]) // N.B. The scale and translation vector were determined empirically.
+    .translate([-200,2100]);
     
   var geoPath = d3.geo.path().projection(projection); 
 
   var tractMap = d3.select("#map").append("svg")
                 .attr("width", "100%")
-                .attr("height", 600)
+                .attr("height", 500)
 
   tractMap.call(tipRoute);
 
@@ -695,18 +695,18 @@ CTPS.demoApp.generateSavings = function(source) {
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
-    .text("Selected")
-    .attr("x", xLabel + 260).attr("y", yLabel - 15)
+    .text("Change in")
+    .attr("x", xLabel + 270).attr("y", yLabel - 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Service")
-    .attr("x", xLabel + 260).attr("y", yLabel)
+    .attr("x", xLabel + 270).attr("y", yLabel)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
    toggler.append("text")
     .text("Hours")
-    .attr("x", xLabel + 260).attr("y", yLabel + 15)
+    .attr("x", xLabel + 270).attr("y", yLabel + 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
 
@@ -809,7 +809,7 @@ CTPS.demoApp.generateSavings = function(source) {
         .attr("height", 10)
         .style("fill-opacity", function() { 
           if (i == -100) { return .8 } 
-          else { return 1 - 2.5 * Math.abs((i+1)/100);}})
+          else { return 2.5 * Math.abs((i+1)/100);}})
 
     toggler.selectAll("vrhText")
       .data(source)
@@ -821,7 +821,7 @@ CTPS.demoApp.generateSavings = function(source) {
         .attr("x", 290)
         .attr("y", function(d) { return yScale(d.Route); })
         .style("fill", "none")
-        .text(function(d) {  return d3.round(d.TotalHours - (- d.TotalHours * i / 100)); })
+        .text(function(d) {  return d3.round((d.TotalHours * i / 100)); })
         .style("font-size", 14)
         .style("text-anchor", "end")
         .style("font-weight", 700)

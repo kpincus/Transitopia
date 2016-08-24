@@ -39,11 +39,6 @@
 <h2> Context </h2>
 <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br><br>
 </p>
-<h4> Some Useful Definitions: </h4>
-<p><b> Disparate Impact: </b> Policies, practices, rules, or other systems that appear to be neutral, but result in a disproportionate impact on protected group</p>
-<p><b> Disparate Benefit: </b></p>
-<p><b> DI/DB Ratio: </b></p>
-<p><b> Vehice Revenue Hours: </b></p>
 <br>
 </div>
 
@@ -56,6 +51,9 @@
 	<h3><a href="#" class="choiceMinority active"> Routes by Percent Minority Ridership </a></h3>
 	<h3><a href="index2.php" class="choiceLowIncome"> Routes by Percent Low Income Ridership</a></h3>
 	<br>
+	<h2 class="subtitle"> Set Disparate Impact Threshold </h2>
+	<div class="col-md-12" id="slider"></div>
+			
 	<div class="col-md-12" id="map"></div>
 </div>
 
@@ -64,28 +62,27 @@
 	<h2 class="subtitle"> Adjust Service Hours by Route</h2><br>
 			<h3 class="lowercase"> Change in Total Service Hours </h3>
 			<div class="col-md-6">
-			<h3 class="lowercase"> By Percent </h3>
-			<h2 class="lowercase">Task: <span id="target-savings">-5%</span></h2>
-			<h2 class="lowercase">Current: <span id="vrhTotSavings" class="highlighted"> 0 </span></h2><br>
-			</div>
-			<div class="col-md-6">
 			<h3 class="lowercase"> By Hours</h3>
 			<h2 class="lowercase">Task: <span id="target-savings-dollars">-5%</span></h2>
 			<h2 class="lowercase">Current: <span id="vrhTotSavings-dollars" class="highlighted"> 0 </span></h2><br>
 			</div>
+			<div class="col-md-6">
+			<h3 class="lowercase"> By Percent </h3>
+			<h2 class="lowercase">Task: <span id="target-savings">-5%</span></h2>
+			<h2 class="lowercase">Current: <span id="vrhTotSavings" class="highlighted"> 0 </span></h2><br>
+			</div>
+			
 		<div class="col-md-12" id="tableRows"></div>
 		<div id="chart"></div>
 	</div>
 
 	<div class="col-md-4" id="calculations">
-			<h2 class="subtitle"> Set Disparate Impact Threshold </h2>
-			<div class="col-md-12" id="slider"></div>
 			
 		<div id="summary">
-			<h2 class="subtitle-large"><br>Analysis Summary</h2>
-			<h3 class="lowercase"> Disparate Impact Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>
-			<h3 class="lowercase"> Disparate Impact Ratio: <span id="calculatedRatio" class="highlighted"> 0 </span> </h3>
-			<h3 class="lowercase"> Result: <span id="isThereImpact" class="highlighted"> </span> </h3>
+			<h2 class="subtitle-large">Analysis Summary</h2><br>
+			<h3 class="lowercase"> Disparate Impact Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3><br>
+			<h3 class="lowercase"> Disparate Impact Ratio: <span id="calculatedRatio" class="highlighted"> 0 </span> </h3><br>
+			<h3 class="lowercase"> Result: <br><span id="isThereImpact" class="highlighted"> </span> </h3>
 		</div>
 
 	</div>
