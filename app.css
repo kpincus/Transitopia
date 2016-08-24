@@ -1,17 +1,17 @@
 * {
   font-family:"Raleway", sans-serif;
-  color: #ddd; 
+  color: black; 
   font-weight: 700; 
   margin: 0;
   padding:0;
 }
 
 html{ 
-  background-color: black; 
+  background-color: white; 
 }
 
 body {
-  background-color: black; 
+  background-color: white; 
   margin: 0;
   color: #ddd;
   padding: 20px;
@@ -50,33 +50,33 @@ p {
 
 /* D3 elements styling */
 #map { height: 600px; padding-top: 20px; }
-text { fill: white; }
+text { fill: black; }
 .axis { fill: none; }
-.axis text { fill: white; font-weight: 300; }
+.axis text { fill: black; }
 .axis path, .axis line { stroke-width: 0; }
-.x path, .x line { stroke: white; stroke-width: 1; fill: none;}
-.ratio line, .ratio path { stroke: white; stroke-width: 1; fill: none; }
+.x path, .x line { stroke: black; stroke-width: 1; fill: none;}
+.ratio line, .ratio path { stroke: black; stroke-width: 1; fill: none; }
 /* Drag styling */
 
 .ratio .halo {
-  stroke: white;
+  stroke: black;
   stroke-width: 4px;
   stroke-linecap: round;
 }
 
 .domain { 
- stroke: white;
+ stroke: black;
   stroke-width: 2px;
  }
 
 .slider .handle path {
-  stroke: white;
+  stroke: black;
   stroke-width: 15px;
   pointer-events: none;
 }
 
 .slider .handle text {
-  fill: white;
+  fill: black;
   text-align: center;
   font-size: 18px;
 }
@@ -95,7 +95,8 @@ text { fill: white; }
 /* Div element styling */ 
 
 
-#summary #calculatedRatio, #summary #sliderRatio{ 
+#summary #calculatedRatio, #summary #sliderRatio, #vrhTotSavings, #target-savings, #vrhTotSavings-dollars, #target-savings-dollars{ 
+  color: #EE4000;
   font-size: 28px;
 }
 
@@ -103,10 +104,6 @@ text { fill: white; }
   overflow: visible;
 }
 
-#chart { 
-  overflow: visible;
-  height: 550px;
-}
 
 #calculations { 
 }
@@ -127,13 +124,8 @@ text { fill: white; }
   height: 580px;
 }
 
-#target-savings { 
- color: orange;
- font-size: 3rem;
-}
-
 .highlighted { 
- color: orange;
+ color: #EE4000;
 }
 .padded-title {
   margin: 10px;
@@ -148,19 +140,19 @@ path.routes:hover {
  }
 
 .subtitle { 
-  color: orange;
-  text-decoration: underline;
+  line-height: 1.1;
+  color: #EE4000;
  }
 
 a { 
-  color: white;
   text-transform: none;
   opacity: .5;
+  color: black;
 
 }
 a:hover, a:focus, a:active, a.active { 
   text-decoration: none;
-  color: #dd3497;
+  color: #EE4000;
   font-weight: 700;
   text-transform: uppercase;
   opacity: 1;
@@ -176,6 +168,16 @@ a:hover, a:focus, a:active, a.active {
   width:1px;
   height:1px;
   overflow:hidden;
+}
+
+#chart { 
+  display: none;
+ }
+
+.subtitle-large {
+  font-size: 42px;
+  color: #EE4000;
+  line-height: 1.1
 }
 
 

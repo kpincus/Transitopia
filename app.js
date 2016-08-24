@@ -1,6 +1,13 @@
 var CTPS = {};
 CTPS.demoApp = {};
 
+
+var minTotal = 0; 
+var popTotal = 0; 
+var vrhSavings = 0; 
+var vrhSavingsTotal = 0; 
+var globalVRH = 0; 
+
 var projection = d3.geo.conicConformal()
   .parallels([41 + 43 / 60, 42 + 41 / 60])
     .rotate([71 + 30 / 60, -41 ])
@@ -53,13 +60,8 @@ queue()
     CTPS.demoApp.generatePanel(results[0]);
     CTPS.demoApp.generateSavings(results[0]);
 
-    var globalVRH = 0; 
     results[0].forEach(function(i){ globalVRH += +i.TotalHours; })
-
-    var minTotal = 0; 
-    var popTotal = 0; 
-    var vrhSavings = 0; 
-    var vrhSavingsTotal = 0; 
+     d3.select("#target-savings-dollars").text(d3.round(-globalVRH * .05, 2) + " hours")
 
     //highlight rectangles
     d3.selectAll(".selection").on("mouseover", function() { 
@@ -68,13 +70,13 @@ queue()
             
             d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
               .style("font-weight", 700)
-              .style("fill", "#FFC04C")
+              .style("fill", "#EE4000")
 
             d3.selectAll("." + routeName).filter(".routes")
-              .style("stroke", "orange")
+              .style("stroke", "EE4000")
 
             d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", "orange")
+              .style("fill", "EE4000")
 
             d3.selectAll(".selection") 
               .style("cursor", "pointer");
@@ -87,10 +89,10 @@ queue()
             
             d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
               .style("font-weight", 300)
-              .style("fill", "#ddd")
+              .style("fill", "black")
 
             d3.selectAll("." + routeName).filter(".routes")
-              .style("stroke", "#ddd")
+              .style("stroke", "black")
 
             d3.selectAll("." + routeName).filter(".minorityChart")
               .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
@@ -109,7 +111,7 @@ queue()
           .style("stroke-width", 2)
 
         d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-          .style("fill", "orange")
+          .style("fill", "EE4000")
       }
     })
 
@@ -137,16 +139,15 @@ queue()
           //highlight appropriate bus routes on map and on text
           d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
             .style("font-weight", 700)
-            .style("fill", "orange")
+            .style("fill", "EE4000")
             .classed("clicked", true);
 
           d3.selectAll("." + routeName).filter(".routes")
-            .style("stroke-dasharray", "none")
-            .style("stroke", "orange")
+            .style("stroke", "EE4000")
             .classed("clicked", true);
 
           d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", "orange")
+              .style("fill", "EE4000")
               .classed("clicked", true);
 
           var letterRef = routeName.split("e")[1];
@@ -171,7 +172,7 @@ queue()
               .style("stroke-width", 2)
 
             d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-              .style("fill", "orange")
+              .style("fill", "EE4000")
 
             results[0].forEach(function(i){
               if (i.Route == letterRef) { 
@@ -188,12 +189,11 @@ queue()
           //highlight bus routes and text
           d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
             .style("font-weight", 300)
-            .style("fill", "#ddd")
+            .style("fill", "black")
             .classed("clicked", false);
 
           d3.selectAll("." + routeName).filter(".routes")
-            .style("stroke-dasharray", "1, 2")
-            .style("stroke", "#ddd")
+            .style("stroke", "black")
             .classed("clicked", false);
 
           d3.selectAll("." + routeName).filter(".minorityChart")
@@ -228,6 +228,8 @@ queue()
         }
         
         d3.select("#vrhTotSavings").text(d3.round(100 * vrhSavings / globalVRH, 2) + "%")
+        d3.select("#vrhTotSavings-dollars").text(d3.round(vrhSavings, 2) + " hours")
+
       //Update front-end numbers
         var diRatio = (100 * minTotal / (popTotal + .01))/47.5;
 
@@ -275,9 +277,8 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
       .append("path")
         .attr("class", function(d) { return "t" + d.properties.TRACT; })
         .attr("d", function(d) { return geoPath(d); })
-        .style("fill", function(d) { return colorScale(d.properties.MINORITY_HH_PCT)})
-        .style("opacity", .3)
-        //.style("opacity",  function(d) { return Math.sqrt(d.properties.MINORITY_HH_PCT/2);})
+        .style("fill", "black")
+        .style("opacity",  function(d) { return Math.sqrt(d.properties.MINORITY_HH_PCT);})
 
   tractMap.selectAll(".routes")
       .data(routes)
@@ -285,10 +286,9 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
       .append("path")
         .attr("class", function(d) { return "route" + d.properties.letter + " routes selection"})
         .attr("d", function(d) { return geoPath(d); })
-        .style("stroke", "#ddd")
+        .style("stroke", "black")
         .style("fill", "none")
         .style("stroke-width", 3)
-        .style("stroke-dasharray", "1, 2")
         .style("opacity", 1)
         .on("mouseenter", function(d) { tipRoute.show(d); })
         .on("mouseleave", function(d) { tipRoute.hide(d); })
@@ -309,40 +309,40 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
 
     //text and colors
     tractMap.append("rect")
-      .style("fill", colorScale(.1)).style("stroke", "none")
+      .style("fill", "black").style("stroke", "none").style("opacity", .39)
       .attr("x", xPos).attr("y", yPos + 15).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 22)
-      .text("10%");
+      .text("15%");
     tractMap.append("rect")
-      .style("fill", colorScale(.2)).style("stroke", "none")
+      .style("fill", "black").style("stroke", "none").style("opacity", .55)
       .attr("x", xPos).attr("y", yPos + 30).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 37)
-      .text("20%");
+      .text("30%");
     tractMap.append("rect")
-      .style("fill", colorScale(.3)).style("stroke", "none")
+      .style("fill", "black").style("stroke", "none").style("opacity", .67)
       .attr("x", xPos).attr("y", yPos + 45).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 52)
-      .text("30%");
+      .text("45%");
     tractMap.append("rect")
-      .style("fill", colorScale(.4)).style("stroke", "none")
+      .style("fill", "black").style("stroke", "none").style("opacity", .76)
       .attr("x", xPos).attr("y", yPos + 60).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 67)
-      .text("40%");
+      .text("60%");
     tractMap.append("rect")
-      .style("fill", colorScale(.8)).style("stroke", "none")
+      .style("fill", "black").style("stroke", "none").style("opacity", .85)
       .attr("x", xPos).attr("y", yPos + 75).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 82)
-      .text(">50%");
+      .text(">75%");
 
 }
 
@@ -429,12 +429,12 @@ toggler.append("rect") //CI key
     .attr("y", yPos - 40)
     .attr("width", 50)
     .attr("height", 10)
-    .style("fill", "#ddd")
+    .style("fill", "black")
     .style("fill-opacity", .3)
 
 toggler.append("path") //path for CI key
     .attr("d", "M 53 27 L 53 30 L 108 30 L 108 27 L 108 30 L 81 30 L 81 35 L 140 35")
-    .style("stroke", "#ddd")
+    .style("stroke", "black")
     .style("stroke-width", 1)
 
 toggler.append("rect") //% key
@@ -442,12 +442,12 @@ toggler.append("rect") //% key
     .attr("y", yPos - 40)
     .attr("width", 2)
     .attr("height", 10)
-    .style("fill", "#ddd")
+    .style("fill", "black")
     .style("fill-opacity", 1)
 
 toggler.append("path")
     .attr("d", "M 81 12 L 81 8 L 140 8")
-    .style("stroke", "#ddd")
+    .style("stroke", "black")
     .style("stroke-width", 1)
 
 //Graphing
@@ -459,7 +459,7 @@ toggler.append("path")
     .attr("class", function(d) { return "route" + d.Route + " letterName selection"})
     .attr("x", 15)
     .attr("y", function(d) { return yScale(d.Route) + 10})
-    .style("fill", "#ddd")
+    .style("fill", "black")
     .style("font-weight", 300)
 
 //graph DI coverage
@@ -469,7 +469,7 @@ toggler.append("path")
     .attr("y", 105)
     .attr("width", xScaleLength(47.5))
     .attr("height", height - 55)
-    .style("fill", "#ddd")
+    .style("fill", "black")
     .style("fill-opacity", .05)
 
 toggler.call(tip);
@@ -491,7 +491,7 @@ toggler.call(tip);
       .on("mouseenter", function(d) { tip.show(d); })
       .on("mouseout", function(d) { tip.hide(d); })
 
-//graph minority percentage (white bar)
+//graph minority percentage (black bar)
   toggler.selectAll(".minorityPercent")
     .data(source)
     .enter()
@@ -561,7 +561,8 @@ var handle = slider.append("g")
 
 handle.append("path")
   .attr("transform", "translate(0," + (height / 2 - 10)+ ")")
-  .attr("d", "M 0 -10 V 10")
+  .attr("d", "M 0 -15 V 15")
+  .style("stroke-width", 5)
 
 handle.append('text')
   .text("1.0")
@@ -574,9 +575,9 @@ slider.append("rect")
     .attr("class", "yourChange")
     .attr("x", ratioScale(0))
     .attr("y", 0)
-    .attr("width", 3)
-    .attr("height", 20)
-    .style("fill", "orange")
+    .attr("width", 5)
+    .attr("height", 25)
+    .style("fill", "#EE4000")
     .style("fill-opacity", 1)
 
 function brushed() {
@@ -595,11 +596,21 @@ function brushed() {
   d3.select('.affected')
       .attr("width", xScaleLength(value * 47.5))
 
+  //Update front-end numbers
+  var diRatio = (100 * minTotal / (popTotal + .01))/47.5;
+
+  d3.selectAll('#isThereImpact')
+    .text(function() { 
+      if (diRatio < brushValue) { return "No Disparate Impact" }
+      else { return "Disparate Impact" }
+    })
+    
+
 }//end function brushed()
 
 
-}
 
+}
 
 CTPS.demoApp.generateSavings = function(source) {
 
@@ -641,52 +652,68 @@ CTPS.demoApp.generateSavings = function(source) {
    toggler.append("text")
     .text("Route")
     .attr("x", xLabel + 3).attr("y", yLabel + 8)
-    .style("text-anchor", "end").style("font-size", 12)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Total")
     .attr("x", xLabel + 70).attr("y", yLabel)
-    .style("text-anchor", "end").style("font-size", 12)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Ridership")
     .attr("x", xLabel + 70).attr("y", yLabel + 15)
-    .style("text-anchor", "end").style("font-size", 12)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Percent")
     .attr("x", xLabel + 140).attr("y", yLabel - 15)
-    .style("text-anchor", "end").style("font-size", 12)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Minority")
     .attr("x", xLabel + 140).attr("y", yLabel)
-    .style("text-anchor", "end").style("font-size", 12)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Ridership")
     .attr("x", xLabel + 140).attr("y", yLabel + 15)
-    .style("text-anchor", "end").style("font-size", 12)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Existing")
     .attr("x", xLabel + 200).attr("y", yLabel - 15)
-    .style("text-anchor", "end").style("font-size", 12)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Service")
     .attr("x", xLabel + 200).attr("y", yLabel)
-    .style("text-anchor", "end").style("font-size", 12)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
    toggler.append("text")
     .text("Hours")
     .attr("x", xLabel + 200).attr("y", yLabel + 15)
-    .style("text-anchor", "end").style("font-size", 12)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
-    .text("Vehicle Revenue Hours")
-    .attr("x", xLabel + 420).attr("y", yLabel - 10)
-    .style("text-anchor", "end").style("font-size", 12)
+    .text("Selected")
+    .attr("x", xLabel + 260).attr("y", yLabel - 15)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
+
+  toggler.append("text")
+    .text("Service")
+    .attr("x", xLabel + 260).attr("y", yLabel)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
+
+   toggler.append("text")
+    .text("Hours")
+    .attr("x", xLabel + 260).attr("y", yLabel + 15)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
+
+
+  toggler.append("text")
+    .text("Change in Service Hours")
+    .attr("x", xLabel + 500).attr("y", yLabel - 10)
+    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   //Filling in the table
   toggler.selectAll(".letterName")
@@ -696,7 +723,7 @@ CTPS.demoApp.generateSavings = function(source) {
       .attr("class", function(d) { return "route" + d.Route + " letterName selection"})
       .attr("x", 15)
       .attr("y", function(d) { return yScale(d.Route); })
-      .attr("fill", "#ddd")
+      .attr("fill", "black")
       .text(function(d) { return d.Route; })
       .style("text-anchor", "middle")
 
@@ -708,7 +735,7 @@ CTPS.demoApp.generateSavings = function(source) {
       .attr("class", function(d) { return "route" + d.Route + " numRiders selection"})
       .attr("x", 100)
       .attr("y", function(d) { return yScale(d.Route); })
-      .attr("fill", "#ddd")
+      .attr("fill", "black")
       .text(function(d) { return comma(d.Wdky_Riders); })
       .style("text-anchor", "end")
 
@@ -719,7 +746,7 @@ CTPS.demoApp.generateSavings = function(source) {
       .attr("class", function(d) { return "route" + d.Route + " minPercent selection"})
       .attr("x", 165)
       .attr("y", function(d) { return yScale(d.Route); })
-      .attr("fill", "#ddd")
+      .attr("fill", "black")
       .text(function(d) { return comma(d.Minority_Percent) + "%"; })
       .style("text-anchor", "end")
 
@@ -730,17 +757,17 @@ CTPS.demoApp.generateSavings = function(source) {
       .attr("class", function(d) { return "route" + d.Route + " vrhTime selection"})
       .attr("x", 225)
       .attr("y", function(d) { return yScale(d.Route); })
-      .attr("fill", "#ddd")
+      .attr("fill", "black")
       .text(function(d) { return d.TotalHours; })
       .style("text-anchor", "end")
 
   vrhScale = d3.scale.ordinal()
               .domain([-100, -30, -20, -10, 0, 10, 20, 30])
-              .rangePoints([250, w - 30])
+              .rangePoints([310, w - 30])
 
   vrhScaleLabels = d3.scale.ordinal()
               .domain(["-100%", "-30%","-20%","-10%","0%","+10%","+20%","+30%",])
-              .rangePoints([250, w - 30])
+              .rangePoints([310, w - 30])
 
   var vrhScaleLength = d3.scale.linear()
                     .domain([0, 60])
@@ -754,7 +781,15 @@ CTPS.demoApp.generateSavings = function(source) {
     .selectAll("text")
       .style("font-size", 8)
 
-  var increments = [-100, -30, -20, -10, 0, 10, 20, 30];
+  toggler.append("line")
+    .attr("x1", (vrhScale(0) + vrhScale(10))/2 )
+    .attr("x2", (vrhScale(0) + vrhScale(10))/2)
+    .attr("y1", yScale("A"))
+    .attr("y2", yScale("Z"))
+    .style("stroke-dasharray", "2, 1")
+    .style("stroke", "black")
+
+  var increments = [-100, -30, -20, -10, 10, 20, 30];
   increments.forEach(function(i){
     toggler.selectAll("vrhSlider")
       .data(source)
@@ -767,38 +802,32 @@ CTPS.demoApp.generateSavings = function(source) {
         .attr("y", function(d) { return yScale(d.Route) - 8; })
         .style("fill", function() { 
           if (i == -100) { return  "red" } 
-          else { return "#ddd";}})
-        .style("stroke", "orange")
+          else { return "black";}})
+        .style("stroke", "EE4000")
         .style("stroke-width", 0)
         .attr("width", 28)
         .attr("height", 10)
         .style("fill-opacity", function() { 
-          if (i == -100) { return .3 } 
+          if (i == -100) { return .8 } 
           else { return 1 - 2.5 * Math.abs((i+1)/100);}})
 
-    /*toggler.selectAll("vrhText")
+    toggler.selectAll("vrhText")
       .data(source)
       .enter()
       .append("text")
         .attr("class", function(d) { 
-          if (i == 0 ) { 
-            return "route" + d.Route + " " + "percent" + i + " vrhSlider selection clicked";
-          } else { 
             return "route" + d.Route + " " + "percent" + i + " vrhSlider selection";
-          }
         })
-        .attr("x", vrhScale(i) + 10)
-        .attr("y", function(d) { return yScale(d.Route) - 4; })
-        .style("fill", function() { 
-          if (i == 0 ) { return "#ddd" }
-          else { return "none"; }
-        }) 
-        .text(function(d) { 
-          if (i == -100) { return "Remove all"; }
-          else { return d3.round(d.TotalHours - (- d.TotalHours * i / 100)) + " hrs"; }})
-        .style("font-size", 8)
-        .style("text-anchor", "middle")*/
+        .attr("x", 290)
+        .attr("y", function(d) { return yScale(d.Route); })
+        .style("fill", "none")
+        .text(function(d) {  return d3.round(d.TotalHours - (- d.TotalHours * i / 100)); })
+        .style("font-size", 14)
+        .style("text-anchor", "end")
+        .style("font-weight", 700)
+        .style("font-family", "Open Sans")
   })
+
 
     
 }

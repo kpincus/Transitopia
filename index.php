@@ -60,26 +60,33 @@
 </div>
 
 <div class="col-md-8">
-	<div class="col-md-5" id="second-third">
-		<h2 class="subtitle"> Set Disparate Impact Threshold </h2>
-		<div class="col-md-12" id="slider"></div>
-		<div class="col-md-12" id="chart"></div>
-	</div>
-
-	<div class="col-md-7" id="calculations">
-		<div class="col-md-6">
-			<h2 class="subtitle"> Adjust Service Hours by Route</h2><br>
+	<div class="col-md-8" id="second-third">
+	<h2 class="subtitle"> Adjust Service Hours by Route</h2><br>
 			<h3 class="lowercase"> Change in Total Service Hours </h3>
+			<div class="col-md-6">
+			<h3 class="lowercase"> By Percent </h3>
 			<h2 class="lowercase">Task: <span id="target-savings">-5%</span></h2>
 			<h2 class="lowercase">Current: <span id="vrhTotSavings" class="highlighted"> 0 </span></h2><br>
-		</div>
-		<div class="col-md-6" id="summary">
-			<h2 class="subtitle">Analysis Summary</h2>
+			</div>
+			<div class="col-md-6">
+			<h3 class="lowercase"> By Hours</h3>
+			<h2 class="lowercase">Task: <span id="target-savings-dollars">-5%</span></h2>
+			<h2 class="lowercase">Current: <span id="vrhTotSavings-dollars" class="highlighted"> 0 </span></h2><br>
+			</div>
+		<div class="col-md-12" id="tableRows"></div>
+		<div id="chart"></div>
+	</div>
+
+	<div class="col-md-4" id="calculations">
+			<h2 class="subtitle"> Set Disparate Impact Threshold </h2>
+			<div class="col-md-12" id="slider"></div>
+			
+		<div id="summary">
+			<h2 class="subtitle-large"><br>Analysis Summary</h2>
 			<h3 class="lowercase"> Disparate Impact Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>
 			<h3 class="lowercase"> Disparate Impact Ratio: <span id="calculatedRatio" class="highlighted"> 0 </span> </h3>
 			<h3 class="lowercase"> Result: <span id="isThereImpact" class="highlighted"> </span> </h3>
 		</div>
-		<div class="col-md-12" id="tableRows"></div>
 
 	</div>
 </div>
