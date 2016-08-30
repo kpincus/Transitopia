@@ -151,13 +151,13 @@ queue()
               .classed("clicked", true);
 
           var letterRef = routeName.split("e")[1];
-
-          results[0].forEach(function(i){
+		  
+		  results[0].forEach(function(i){
             if (i.Route == letterRef) { 
               minTotal += i.Wdky_Riders * i.Minority_Percent / 100;
               popTotal += i.Wdky_Riders;
             }
-          })
+		  })
 
           //highlight appropriate VRH rectangles
             d3.selectAll("." + routeName).filter(".vrhSlider").filter("rect")
@@ -201,11 +201,11 @@ queue()
               .classed("clicked", false);
 
           var letterRef = routeName.split("e")[1];
-
+	  
           results[0].forEach(function(i){
             if (i.Route == letterRef) { 
               minTotal -= i.Wdky_Riders * i.Minority_Percent / 100;
-              popTotal -= i.Wdky_Riders;
+			  popTotal -= i.Wdky_Riders;
             }
           })
 
@@ -277,7 +277,7 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
       .append("path")
         .attr("class", function(d) { return "t" + d.properties.TRACT; })
         .attr("d", function(d) { return geoPath(d); })
-        .style("fill", "#EE4000")
+        .style("fill", "blue") /*change map colors*/
         .style("opacity",  function(d) { return Math.sqrt(d.properties.MINORITY_HH_PCT);})
 
   tractMap.selectAll(".routes")
@@ -298,18 +298,18 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
     var yPos = 40; 
     var height = 600; 
     //background
-    tractMap.append("text")
+    /*tractMap.append("text")
       .style("font-weight", 700)
       .attr("x", xPos).attr("y", yPos - 12)
-      .text("KEY");
+      .text("KEY");*/
     tractMap.append("text")
       .style("font-weight", 700)
       .attr("x", xPos).attr("y", yPos + 5)
-      .text("% Minority Households");
+      .text("Percent Minority Population");
 
     //text and colors
     tractMap.append("rect")
-      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .39)
+      .style("fill", "blue").style("stroke", "none").style("opacity", .39)
       .attr("x", xPos).attr("y", yPos + 15).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
@@ -712,7 +712,7 @@ CTPS.demoApp.generateSavings = function(source) {
 
   toggler.append("text")
     .text("Change in Service Hours")
-    .attr("x", xLabel + 500).attr("y", yLabel - 10)
+    .attr("x", xLabel + 535).attr("y", yLabel - 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   //Filling in the table
@@ -779,7 +779,7 @@ CTPS.demoApp.generateSavings = function(source) {
     .attr("transform", "translate(12, 30)")
     .call(vrhAxis)
     .selectAll("text")
-      .style("font-size", 8)
+      .style("font-size", 12)
 
   toggler.append("line")
     .attr("x1", (vrhScale(0) + vrhScale(10))/2 )
