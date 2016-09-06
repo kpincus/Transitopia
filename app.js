@@ -7,6 +7,11 @@ var popTotal = 0;
 var vrhSavings = 0; 
 var vrhSavingsTotal = 0; 
 var globalVRH = 0; 
+// new below
+var minTotalBen = 0;
+var popTotalBen = 0;
+var minTotalBur = 0;
+var popTotalBur = 0;
 
 var projection = d3.geo.conicConformal()
   .parallels([41 + 43 / 60, 42 + 41 / 60])
@@ -151,13 +156,39 @@ queue()
               .classed("clicked", true);
 
           var letterRef = routeName.split("e")[1];
-		  
+
+// kp: calc of affected minority percent if rect not previously selected		  
 		  results[0].forEach(function(i){
             if (i.Route == letterRef) { 
-              minTotal += i.Wdky_Riders * i.Minority_Percent / 100;
-              popTotal += i.Wdky_Riders;
-            }
+			
+				if (i.Selected != 0){
+					minTotal -= i.Wdky_Riders * i.Minority_Percent / 100;
+					popTotal -= i.Wdky_Riders;
+				}	  
+				minTotal += i.Wdky_Riders * i.Minority_Percent / 100;
+                popTotal += i.Wdky_Riders;
+		
+				if (i.Selected < 0) {	  
+					  minTotalBur -= i.Wdky_Riders * i.Minority_Percent / 100;
+					  popTotalBur -= i.Wdky_Riders;
+				}
+				if (i.Selected > 0) {
+					  minTotalBen -= i.Wdky_Riders * i.Minority_Percent / 100;
+					  popTotalBen -= i.Wdky_Riders;		
+				}
+				
+				if (percentRef < 0) { 
+					minTotalBur += i.Wdky_Riders * i.Minority_Percent / 100;
+					popTotalBur += i.Wdky_Riders;  				  
+				}
+				if (percentRef > 0) {
+					minTotalBen += i.Wdky_Riders * i.Minority_Percent / 100;
+					popTotalBen += i.Wdky_Riders;	
+				}
+           
+			}		
 		  })
+
 
           //highlight appropriate VRH rectangles
             d3.selectAll("." + routeName).filter(".vrhSlider").filter("rect")
@@ -201,13 +232,28 @@ queue()
               .classed("clicked", false);
 
           var letterRef = routeName.split("e")[1];
-	  
+
+// kp: calc of affected minority percent if rect previously selected		  
           results[0].forEach(function(i){
-            if (i.Route == letterRef) { 
-              minTotal -= i.Wdky_Riders * i.Minority_Percent / 100;
-			  popTotal -= i.Wdky_Riders;
-            }
+            if (i.Route == letterRef) {
+				
+                minTotal -= i.Wdky_Riders * i.Minority_Percent / 100;
+			    popTotal -= i.Wdky_Riders;
+				
+				if (percentRef < 0) {
+					minTotalBur -= i.Wdky_Riders * i.Minority_Percent / 100;
+					popTotalBur -= i.Wdky_Riders;
+					i.SelectedBur = 0;
+				}
+				else {
+					minTotalBen -= i.Wdky_Riders * i.Minority_Percent / 100;
+					popTotalBen -= i.Wdky_Riders;		
+					i.SelectedBen = 0;
+				}
+				
+			}
           })
+
 
           //highlight appropriate VRH rectangles
           d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
@@ -220,7 +266,7 @@ queue()
             if (i.Route == letterRef) { 
                 vrhSavings -= i.TotalHours * percentRef / 100;
                 i.Selected = 0;
-            }
+			}
           })
 
           d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
@@ -231,12 +277,48 @@ queue()
         d3.select("#vrhTotSavings-dollars").text(d3.round(vrhSavings, 2) + " hours")
 
       //Update front-end numbers
-        var diRatio = (100 * minTotal / (popTotal + .01))/47.5;
+	  
+// This is new I hope it works!
+/*
+	  var dataset = [10, 20, 30, 40]; // testing this with four buttons selected
+	  
+	  var list = d3.selectAll("rect").filter(".clicked").filter(".vrhSlider"); // this works in the devcon
+	  list[0][0]; // this works too! then use for loop through the whole list array with the calculations
+	  // "just" need to add the data .. see how Beatrice got the csv data in her calculations
+	  
+
+
+
+		dataset = d3.csv("sourceTable.csv");
+		
+		function(d) { 
+			return { 
+				minority: +d.Min_Num_Rnd, 
+				ridership: +d.Wkdy_Rider_Rnd
+			};
+		};
+		//,function(data){console.log(data[10]);});
+		
+		//var testCalculation = 
+
+*/
+// end of new I don't know what I'm doing	  
+	  
+	  
+        var diRatio = (100 * minTotal / (popTotal + .01))/41.9;
+		
+		//new
+		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
+		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
 
         d3.selectAll(".yourChange")
           .attr("x", ratioScale(diRatio));
 
         d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2));
+		 
+		// new 
+		d3.selectAll('#calculatedRatioBur').text(d3.round(diRatioBur, 2));
+		d3.selectAll('#calculatedRatioBen').text(d3.round(diRatioBen, 2));
 
         d3.selectAll('#isThereImpact')
           .text(function() { 
@@ -244,7 +326,6 @@ queue()
             else { return "Disparate Impact" }
           })
     })
-
 
   }); 
 
@@ -467,7 +548,7 @@ toggler.append("path")
     .attr("class", "affected")
     .attr("x", xScale(0))
     .attr("y", 105)
-    .attr("width", xScaleLength(47.5))
+    .attr("width", xScaleLength(41.9))
     .attr("height", height - 55)
     .style("fill", "black")
     .style("fill-opacity", .05)
@@ -593,17 +674,19 @@ function brushed() {
   handle.select('text').text(d3.round(value, 2));
 
   d3.select("#sliderRatio").text(d3.round(value, 2));
+  d3.select("#sliderRatioOpp").text(d3.round(2-value, 2));
   d3.select('.affected')
-      .attr("width", xScaleLength(value * 47.5))
+      .attr("width", xScaleLength(value * 41.9))
 
   //Update front-end numbers
-  var diRatio = (100 * minTotal / (popTotal + .01))/47.5;
+  var diRatio = (100 * minTotal / (popTotal + .01))/41.9;
 
   d3.selectAll('#isThereImpact')
     .text(function() { 
       if (diRatio < brushValue) { return "No Disparate Impact" }
       else { return "Disparate Impact" }
     })
+
     
 
 }//end function brushed()
@@ -720,7 +803,7 @@ CTPS.demoApp.generateSavings = function(source) {
     .data(source)
     .enter()
     .append("text")
-      .attr("class", function(d) { return "route" + d.Route + " letterName selection"})
+      .attr("class", function(d) { return "route" + d.Route + " letterName selection"}) // SETS CLASS HERE BASED ON CSV DATA!
       .attr("x", 15)
       .attr("y", function(d) { return yScale(d.Route); })
       .attr("fill", "black")
@@ -789,7 +872,7 @@ CTPS.demoApp.generateSavings = function(source) {
     .style("stroke-dasharray", "2, 1")
     .style("stroke", "black")
 
-  var increments = [-100, -30, -20, -10, 10, 20, 30];
+  var increments = [-100, -30, -20, -10, 10, 20, 30]; // APPENDS DATA BELOW!
   increments.forEach(function(i){
     toggler.selectAll("vrhSlider")
       .data(source)

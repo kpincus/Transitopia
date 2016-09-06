@@ -80,9 +80,17 @@
 			
 		<div id="summary">
 			<h2 class="subtitle-large">Analysis Summary</h2><br>
-			<h3 class="lowercase"> Disparate Impact Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3><br>
-			<h3 class="lowercase"> Disparate Impact Ratio: <span id="calculatedRatio" class="highlighted"> 0 </span> </h3><br>
-			<h3 class="lowercase"> Result: <br><span id="isThereImpact" class="highlighted"> </span> </h3>
+			<h3 class="lowercase"> Disparate Impact Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>
+			<h3 class="lowercase"> Disparate Impact Ratio: <span id="calculatedRatio" class="highlighted"> 0 </span> </h3>
+			<h3 class="lowercase"> Result: <br><span id="isThereImpact" class="highlighted"> </span> </h3><br>
+			
+			<h3 class="lowercase"> Disparate Burden Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>			
+			<h3 class="lowercase"> Disparate Burden Ratio: <span id="calculatedRatioBur" class="highlighted"> 0 </span> </h3>
+			<h3 class="lowercase"> Result: <br><span id="isThereBurden" class="highlighted"> </span> </h3><br>
+			
+			<h3 class="lowercase"> Disparate Benefit Threshold: <span id="sliderRatioOpp" class="highlighted"> 0 </span> </h3>
+			<h3 class="lowercase"> Disparate Benefit Ratio: <span id="calculatedRatioBen" class="highlighted"> 0 </span> </h3>
+			<h3 class="lowercase"> Result: <br><span id="isThereBenefit" class="highlighted"> </span> </h3><br>
 		</div>
 
 	</div>
