@@ -13,6 +13,7 @@ var popTotalBen = 0;
 var minTotalBur = 0;
 var popTotalBur = 0;
 
+
 var projection = d3.geo.conicConformal()
   .parallels([41 + 43 / 60, 42 + 41 / 60])
     .rotate([71 + 30 / 60, -41 ])
@@ -162,28 +163,28 @@ queue()
             if (i.Route == letterRef) { 
 			
 				if (i.Selected != 0){
-					minTotal -= i.Wdky_Riders * i.Minority_Percent / 100;
-					popTotal -= i.Wdky_Riders;
+					minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotal -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
 				}	  
-				minTotal += i.Wdky_Riders * i.Minority_Percent / 100;
-                popTotal += i.Wdky_Riders;
+				minTotal += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+                popTotal += i.Wdky_Riders * i.TotalHours * percentRef / 100;
 		
 				if (i.Selected < 0) {	  
-					  minTotalBur -= i.Wdky_Riders * i.Minority_Percent / 100;
-					  popTotalBur -= i.Wdky_Riders;
+					  minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					  popTotalBur -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
 				}
 				if (i.Selected > 0) {
-					  minTotalBen -= i.Wdky_Riders * i.Minority_Percent / 100;
-					  popTotalBen -= i.Wdky_Riders;		
+					  minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					  popTotalBen -= i.Wdky_Riders * i.TotalHours * percentRef / 100;		
 				}
 				
 				if (percentRef < 0) { 
-					minTotalBur += i.Wdky_Riders * i.Minority_Percent / 100;
-					popTotalBur += i.Wdky_Riders;  				  
+					minTotalBur += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBur += i.Wdky_Riders * i.TotalHours * percentRef / 100;  				  
 				}
 				if (percentRef > 0) {
-					minTotalBen += i.Wdky_Riders * i.Minority_Percent / 100;
-					popTotalBen += i.Wdky_Riders;	
+					minTotalBen += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBen += i.Wdky_Riders * i.TotalHours * percentRef / 100;	
 				}
            
 			}		
@@ -237,17 +238,17 @@ queue()
           results[0].forEach(function(i){
             if (i.Route == letterRef) {
 				
-                minTotal -= i.Wdky_Riders * i.Minority_Percent / 100;
-			    popTotal -= i.Wdky_Riders;
+                minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+			    popTotal -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
 				
 				if (percentRef < 0) {
-					minTotalBur -= i.Wdky_Riders * i.Minority_Percent / 100;
-					popTotalBur -= i.Wdky_Riders;
+					minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBur -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
 					i.SelectedBur = 0;
 				}
 				else {
-					minTotalBen -= i.Wdky_Riders * i.Minority_Percent / 100;
-					popTotalBen -= i.Wdky_Riders;		
+					minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBen -= i.Wdky_Riders * i.TotalHours * percentRef / 100;		
 					i.SelectedBen = 0;
 				}
 				
@@ -325,6 +326,18 @@ queue()
             if (diRatio < brushValue) { return "No Disparate Impact" }
             else { return "Disparate Impact" }
           })
+		  
+		d3.selectAll('#isThereBurden')
+          .text(function() { 
+            if (diRatioBur < brushValue) { return "No Disparate Burden" }
+            else { return "Disparate Burden" }
+          })  
+		  
+		d3.selectAll('#isThereBenefit')
+          .text(function() { 
+            if (diRatioBen > (2-brushValue)) { return "No Disparate Benefit" }
+            else { return "Disparate Benefit" }
+          })   
     })
 
   }); 
@@ -674,12 +687,17 @@ function brushed() {
   handle.select('text').text(d3.round(value, 2));
 
   d3.select("#sliderRatio").text(d3.round(value, 2));
+  d3.select("#sliderRatioCopy").text(d3.round(value, 2));
   d3.select("#sliderRatioOpp").text(d3.round(2-value, 2));
   d3.select('.affected')
       .attr("width", xScaleLength(value * 41.9))
 
   //Update front-end numbers
   var diRatio = (100 * minTotal / (popTotal + .01))/41.9;
+  
+  //added this here
+  var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
+  var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
 
   d3.selectAll('#isThereImpact')
     .text(function() { 
@@ -687,7 +705,17 @@ function brushed() {
       else { return "Disparate Impact" }
     })
 
-    
+  d3.selectAll('#isThereBurden')
+    .text(function() { 
+      if (diRatioBur < brushValue) { return "No Disparate Burden" }
+      else { return "Disparate Burden" }
+    })
+	
+   d3.selectAll('#isThereBenefit')
+    .text(function() { 
+      if (diRatioBen > (2-brushValue)) { return "No Disparate Benefit" }
+      else { return "Disparate Benefit" }
+    })   
 
 }//end function brushed()
 

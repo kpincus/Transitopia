@@ -84,7 +84,7 @@
 			<h3 class="lowercase"> Disparate Impact Ratio: <span id="calculatedRatio" class="highlighted"> 0 </span> </h3>
 			<h3 class="lowercase"> Result: <br><span id="isThereImpact" class="highlighted"> </span> </h3><br>
 			
-			<h3 class="lowercase"> Disparate Burden Threshold: <span id="sliderRatio" class="highlighted"> 0 </span> </h3>			
+			<h3 class="lowercase"> Disparate Burden Threshold: <span id="sliderRatioCopy" class="highlighted"> 0 </span> </h3>			
 			<h3 class="lowercase"> Disparate Burden Ratio: <span id="calculatedRatioBur" class="highlighted"> 0 </span> </h3>
 			<h3 class="lowercase"> Result: <br><span id="isThereBurden" class="highlighted"> </span> </h3><br>
 			
