@@ -163,28 +163,34 @@ queue()
             if (i.Route == letterRef) { 
 			
 				if (i.Selected != 0){
-					minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotal -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
+					minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; //got rid of this -- i.TotalHours * (percentRef / 100);
+					popTotal -= i.Wdky_Riders * i.Selected; // i.TotalHours * percentRef / 100;
 				}	  
 				minTotal += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
                 popTotal += i.Wdky_Riders * i.TotalHours * percentRef / 100;
+				
+				
 		
 				if (i.Selected < 0) {	  
-					  minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					  popTotalBur -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
+					  minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; //i.TotalHours * (percentRef / 100);
+					  popTotalBur -= i.Wdky_Riders * i.Selected; //i.TotalHours * percentRef / 100;
 				}
 				if (i.Selected > 0) {
-					  minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					  popTotalBen -= i.Wdky_Riders * i.TotalHours * percentRef / 100;		
+					  minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; //i.TotalHours * (percentRef / 100);
+					  popTotalBen -= i.Wdky_Riders * i.Selected; //i.TotalHours * percentRef / 100;		
 				}
 				
 				if (percentRef < 0) { 
 					minTotalBur += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotalBur += i.Wdky_Riders * i.TotalHours * percentRef / 100;  				  
+					popTotalBur += i.Wdky_Riders * i.TotalHours * percentRef / 100;  	
+
+				//	i.SelectedBur = 1;
 				}
 				if (percentRef > 0) {
 					minTotalBen += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
 					popTotalBen += i.Wdky_Riders * i.TotalHours * percentRef / 100;	
+					
+				//	i.SelectedBen = 1;
 				}
            
 			}		
@@ -244,12 +250,12 @@ queue()
 				if (percentRef < 0) {
 					minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
 					popTotalBur -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
-					i.SelectedBur = 0;
+				//	i.SelectedBur = 1;
 				}
-				else {
+				if (percentRef > 0) {
 					minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
 					popTotalBen -= i.Wdky_Riders * i.TotalHours * percentRef / 100;		
-					i.SelectedBen = 0;
+				//	i.SelectedBen = 1;
 				}
 				
 			}
@@ -267,8 +273,9 @@ queue()
             if (i.Route == letterRef) { 
                 vrhSavings -= i.TotalHours * percentRef / 100;
                 i.Selected = 0;
-			}
-          })
+			//	i.SelectedBur = 0; // new
+			//	i.SelectedBen = 0;
+          }})
 
           d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
                 .classed("clicked", false)
@@ -448,6 +455,10 @@ CTPS.demoApp.generatePanel = function(source) {
       i.Wdky_Riders = +i.Wdky_Riders;
       i.Minority_Percent = +i.Minority_Percent;
       i.Selected = 0;
+	  //new
+	  i.MinAffPos = 0;
+	  i.MinAffNeg = 0;
+	  
   })
 
   var height = 600; 
