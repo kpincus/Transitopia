@@ -163,36 +163,29 @@ queue()
             if (i.Route == letterRef) { 
 			
 				if (i.Selected != 0){
-					minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; //got rid of this -- i.TotalHours * (percentRef / 100);
-					popTotal -= i.Wdky_Riders * i.Selected; // i.TotalHours * percentRef / 100;
+					minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; // i.Selected is the key!
+					popTotal -= i.Wdky_Riders * i.Selected;
 				}	  
 				minTotal += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
                 popTotal += i.Wdky_Riders * i.TotalHours * percentRef / 100;
-				
-				
-		
+						
 				if (i.Selected < 0) {	  
-					  minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; //i.TotalHours * (percentRef / 100);
-					  popTotalBur -= i.Wdky_Riders * i.Selected; //i.TotalHours * percentRef / 100;
+					  minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
+					  popTotalBur -= i.Wdky_Riders * i.Selected; 
 				}
 				if (i.Selected > 0) {
-					  minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; //i.TotalHours * (percentRef / 100);
-					  popTotalBen -= i.Wdky_Riders * i.Selected; //i.TotalHours * percentRef / 100;		
+					  minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
+					  popTotalBen -= i.Wdky_Riders * i.Selected; 
 				}
 				
 				if (percentRef < 0) { 
 					minTotalBur += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
 					popTotalBur += i.Wdky_Riders * i.TotalHours * percentRef / 100;  	
-
-				//	i.SelectedBur = 1;
 				}
 				if (percentRef > 0) {
 					minTotalBen += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
 					popTotalBen += i.Wdky_Riders * i.TotalHours * percentRef / 100;	
-					
-				//	i.SelectedBen = 1;
-				}
-           
+				}           
 			}		
 		  })
 
@@ -250,14 +243,11 @@ queue()
 				if (percentRef < 0) {
 					minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
 					popTotalBur -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
-				//	i.SelectedBur = 1;
 				}
 				if (percentRef > 0) {
 					minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
 					popTotalBen -= i.Wdky_Riders * i.TotalHours * percentRef / 100;		
-				//	i.SelectedBen = 1;
-				}
-				
+				}				
 			}
           })
 
@@ -273,8 +263,6 @@ queue()
             if (i.Route == letterRef) { 
                 vrhSavings -= i.TotalHours * percentRef / 100;
                 i.Selected = 0;
-			//	i.SelectedBur = 0; // new
-			//	i.SelectedBen = 0;
           }})
 
           d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
@@ -313,7 +301,7 @@ queue()
 // end of new I don't know what I'm doing	  
 	  
 	  
-        var diRatio = (100 * minTotal / (popTotal + .01))/41.9;
+        var diRatio = (100 * minTotal / (popTotal + .01))/41.9; // add if error then NA
 		
 		//new
 		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
@@ -321,12 +309,24 @@ queue()
 
         d3.selectAll(".yourChange")
           .attr("x", ratioScale(diRatio));
-
+		
         d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2));
 		 
 		// new 
-		d3.selectAll('#calculatedRatioBur').text(d3.round(diRatioBur, 2));
-		d3.selectAll('#calculatedRatioBen').text(d3.round(diRatioBen, 2));
+		d3.selectAll('#calculatedRatioBur')
+		  .text(function() {
+			  if (diRatioBur == 0) {return "N/A"}
+			  else { return d3.round(diRatioBur, 2)}
+		  })
+		  
+		d3.selectAll('#calculatedRatioBen')
+		  .text(function() {
+			  if (diRatioBen == 0) {return "N/A"}
+			  else { return d3.round(diRatioBen, 2)}
+		  })		
+		
+//		d3.selectAll('#calculatedRatioBur').text(d3.round(diRatioBur, 2));
+//		d3.selectAll('#calculatedRatioBen').text(d3.round(diRatioBen, 2));
 
         d3.selectAll('#isThereImpact')
           .text(function() { 
@@ -336,12 +336,14 @@ queue()
 		  
 		d3.selectAll('#isThereBurden')
           .text(function() { 
+		    if (diRatioBur == 0) {return "N/A"}
             if (diRatioBur < brushValue) { return "No Disparate Burden" }
             else { return "Disparate Burden" }
           })  
 		  
 		d3.selectAll('#isThereBenefit')
           .text(function() { 
+		    if (diRatioBen == 0) {return "N/A"}
             if (diRatioBen > (2-brushValue)) { return "No Disparate Benefit" }
             else { return "Disparate Benefit" }
           })   
@@ -454,11 +456,7 @@ CTPS.demoApp.generatePanel = function(source) {
       routes.push(i.Route);
       i.Wdky_Riders = +i.Wdky_Riders;
       i.Minority_Percent = +i.Minority_Percent;
-      i.Selected = 0;
-	  //new
-	  i.MinAffPos = 0;
-	  i.MinAffNeg = 0;
-	  
+      i.Selected = 0;	  
   })
 
   var height = 600; 
@@ -709,6 +707,19 @@ function brushed() {
   //added this here
   var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
   var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
+  
+  // copied from above
+  d3.selectAll('#calculatedRatioBur')
+		  .text(function() {
+			  if (diRatioBur == 0) {return "N/A"}
+			  else { return d3.round(diRatioBur, 2)}
+		  })
+		  
+    d3.selectAll('#calculatedRatioBen')
+		  .text(function() {
+			  if (diRatioBen == 0) {return "N/A"}
+			  else { return d3.round(diRatioBen, 2)}
+		  })
 
   d3.selectAll('#isThereImpact')
     .text(function() { 
@@ -718,12 +729,14 @@ function brushed() {
 
   d3.selectAll('#isThereBurden')
     .text(function() { 
+	  if (diRatioBur == 0) { return "N/A"}
       if (diRatioBur < brushValue) { return "No Disparate Burden" }
       else { return "Disparate Burden" }
     })
 	
    d3.selectAll('#isThereBenefit')
     .text(function() { 
+	  if (diRatioBen == 0) { return "N/A"}
       if (diRatioBen > (2-brushValue)) { return "No Disparate Benefit" }
       else { return "Disparate Benefit" }
     })   

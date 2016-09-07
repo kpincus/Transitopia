@@ -1,5 +1,5 @@
 * {
-  font-family:"Raleway", sans-serif;
+  font-family:"Arial", sans-serif;
   color: black; 
   font-weight: 700; 
   margin: 0;
@@ -26,7 +26,7 @@ div {
 }
 
 h1, h2, h3, h4 { 
-  font-family:"Raleway", sans-serif;
+  font-family:"Arial", sans-serif;
   font-weight: 700; 
   text-transform: uppercase;
 }
@@ -36,6 +36,11 @@ h1 {
   padding: 0px;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 18px;
+  line-height: 150%;
 }
 
 p { 
@@ -184,7 +189,7 @@ a:hover, a:focus, a:active, a.active {
  }
 
 .subtitle-large {
-  font-size: 48px;
+  font-size: 36px;
   color: #EE4000;
   line-height: 1.1
 }
