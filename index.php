@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head lang="en">
 <meta charset="utf-8">
-<title>Transitopia</title>
+<title>Transitopia</title> 
 
 <!-- D3 Library --> 
 <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -35,10 +35,13 @@
 <div id="container" class="col-md-12 container-fluid">
 <div class="col-md-12">
 <h1>Transitopia</h1>
-<div class="col-md-7">
-<h2> Context </h2>
+
+<p> Service equity analysis teaching tool </p><br>
+<!--
 <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br><br>
 </p>
+-->
+
 <br>
 </div>
 
@@ -51,15 +54,26 @@
 	<h3><a href="#" class="choiceMinority active"> Routes by Percent Minority Ridership </a></h3>
 	<h3><a href="index2.php" class="choiceLowIncome"> Routes by Percent Low Income Ridership</a></h3>
 	<br>
+	<br>
+
+<!--
 	<h2 class="subtitle"> Set Disparate Impact Threshold </h2>
 	<div class="col-md-12" id="slider"></div>
-			
+-->		
+	<h2 class="subtitle"> Identify Routes </h2>
+
 	<div class="col-md-12" id="map"></div>
+
 </div>
 
 
 <div class="col-md-8">
-	<div class="col-md-8" id="second-third">
+
+	<h2 class="subtitle"> Set Disparate Impact Threshold </h2>
+	<div class="col-md-8" id="slider"></div>
+
+
+	<div class="col-md-8" id="second-third"><br>
 	<h2 class="subtitle"> Adjust Service Hours by Route</h2><br>
 <!---
 			<h3 class="lowercase"> Change in Total Service Hours </h3>
@@ -77,6 +91,7 @@
 		<div class="col-md-12" id="tableRows"></div>
 		<div id="chart"></div>
 	</div>
+
 
 	<div class="col-md-4" id="calculations">
 			

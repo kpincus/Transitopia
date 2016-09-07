@@ -32,20 +32,22 @@ h1, h2, h3, h4 {
 }
 
 h1 { 
-  font-size: 66px;
+  font-size: 54px;
   padding: 0px;
   margin-top: 10px;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 
 h3 {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 150%;
 }
 
 p { 
   font-family: "Open Sans";
-  font-weight: 300;
+  font-weight: 400;
+  font-size: 24px;
  }
 
 #tableRows text { 
@@ -101,7 +103,7 @@ text { fill: black; }
 
 
 #vrhTotSavings, #target-savings, #vrhTotSavings-dollars, #target-savings-dollars{ 
-  color: #EE4000;
+  color: royalblue; 
   font-size: 22px;
 }
 
@@ -111,7 +113,7 @@ line-height: 1.1;
 }
 
 #summary #calculatedRatio, #summary #sliderRatio { 
-  color: #EE4000;
+  color: royalblue;
 }
 
 #routePercents { 
@@ -139,7 +141,7 @@ line-height: 1.1;
 }
 
 .highlighted { 
- color: #EE4000;
+ color: rgb(182,0,141);
 }
 .padded-title {
   margin: 10px;
@@ -155,7 +157,7 @@ path.routes:hover {
 
 .subtitle { 
   line-height: 1.1;
-  color: #EE4000;
+  color: royalblue;
  }
 
 a { 
@@ -166,10 +168,13 @@ a {
 }
 a:hover, a:focus, a:active, a.active { 
   text-decoration: none;
-  color: #EE4000;
+  color: rgb(182,0,141);
   font-weight: 700;
-  text-transform: uppercase;
   opacity: 1;
+}
+
+a.active {
+	color: royalblue;
 }
 
 
@@ -190,7 +195,7 @@ a:hover, a:focus, a:active, a.active {
 
 .subtitle-large {
   font-size: 36px;
-  color: #EE4000;
+  color: royalblue;
   line-height: 1.1
 }
 

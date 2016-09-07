@@ -76,13 +76,13 @@ queue()
             
             d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
               .style("font-weight", 700)
-              .style("fill", "#EE4000")
+              .style("fill", "rgb(182,0,141)") // this was a hashtag
 
             d3.selectAll("." + routeName).filter(".routes")
-              .style("stroke", "EE4000")
+              .style("stroke", "rgb(182,0,141)")
 
             d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", "EE4000")
+              .style("fill", "rgb(182,0,141)")
 
             d3.selectAll(".selection") 
               .style("cursor", "pointer");
@@ -117,7 +117,7 @@ queue()
           .style("stroke-width", 2)
 
         d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-          .style("fill", "EE4000")
+          .style("fill", "rgb(182,0,141)")
       }
     })
 
@@ -145,15 +145,15 @@ queue()
           //highlight appropriate bus routes on map and on text
           d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
             .style("font-weight", 700)
-            .style("fill", "EE4000")
+            .style("fill", "rgb(182,0,141)")
             .classed("clicked", true);
 
           d3.selectAll("." + routeName).filter(".routes")
-            .style("stroke", "EE4000")
+            .style("stroke", "rgb(182,0,141)")
             .classed("clicked", true);
 
           d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", "EE4000")
+              .style("fill", "rgb(182,0,141)")
               .classed("clicked", true);
 
           var letterRef = routeName.split("e")[1];
@@ -203,7 +203,7 @@ queue()
               .style("stroke-width", 2)
 
             d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-              .style("fill", "EE4000")
+              .style("fill", "rgb(182,0,141)")
 
             results[0].forEach(function(i){
               if (i.Route == letterRef) { 
@@ -273,35 +273,8 @@ queue()
         d3.select("#vrhTotSavings-dollars").text(d3.round(vrhSavings, 2) + " hours")
 
       //Update front-end numbers
-	  
-// This is new I hope it works!
-/*
-	  var dataset = [10, 20, 30, 40]; // testing this with four buttons selected
-	  
-	  var list = d3.selectAll("rect").filter(".clicked").filter(".vrhSlider"); // this works in the devcon
-	  list[0][0]; // this works too! then use for loop through the whole list array with the calculations
-	  // "just" need to add the data .. see how Beatrice got the csv data in her calculations
-	  
-
-
-
-		dataset = d3.csv("sourceTable.csv");
-		
-		function(d) { 
-			return { 
-				minority: +d.Min_Num_Rnd, 
-				ridership: +d.Wkdy_Rider_Rnd
-			};
-		};
-		//,function(data){console.log(data[10]);});
-		
-		//var testCalculation = 
-
-*/
-// end of new I don't know what I'm doing	  
-	  
-	  
-        var diRatio = (100 * minTotal / (popTotal + .01))/41.9; // add if error then NA
+	  	  
+        var diRatio = (100 * minTotal / (popTotal + .01))/41.9; 
 		
 		//new
 		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
@@ -312,39 +285,49 @@ queue()
 		
         d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2));
 		 
-		// new 
+		// new, just updated this section for new calculations
 		d3.selectAll('#calculatedRatioBur')
 		  .text(function() {
-			  if (diRatioBur == 0) {return "N/A"}
-			  else { return d3.round(diRatioBur, 2)}
+			  if (diRatioBur == 0) {return "N/A"} //needed?
+			  else if (diRatio < 0) {return d3.round(diRatioBur, 2)}
+			  else if (diRatio > 0 && minTotal < 0) {return d3.round(diRatio, 2)}
+			  else { return "N/A"}
 		  })
 		  
 		d3.selectAll('#calculatedRatioBen')
 		  .text(function() {
 			  if (diRatioBen == 0) {return "N/A"}
-			  else { return d3.round(diRatioBen, 2)}
+			  else if (diRatio < 0) {return d3.round(diRatioBen, 2)}
+			  else if (diRatio > 0 && minTotal > 0) { return d3.round(diRatio, 2)}
+			  else { return "N/A"}
 		  })		
 		
 //		d3.selectAll('#calculatedRatioBur').text(d3.round(diRatioBur, 2));
 //		d3.selectAll('#calculatedRatioBen').text(d3.round(diRatioBen, 2));
 
+/*
         d3.selectAll('#isThereImpact')
           .text(function() { 
             if (diRatio < brushValue) { return "No Disparate Impact" }
             else { return "Disparate Impact" }
           })
+*/
 		  
 		d3.selectAll('#isThereBurden')
           .text(function() { 
 		    if (diRatioBur == 0) {return "N/A"}
-            if (diRatioBur < brushValue) { return "No Disparate Burden" }
+			else if (diRatio < 0 && diRatioBur < brushValue) {return "No Disparate Burden"}
+            else if (diRatio > 0 && minTotal < 0 && diRatio < brushValue) { return "No Disparate Burden" }
+			else if (diRatio > 0 && minTotal > 0) {return "N/A"}
             else { return "Disparate Burden" }
           })  
 		  
 		d3.selectAll('#isThereBenefit')
           .text(function() { 
 		    if (diRatioBen == 0) {return "N/A"}
-            if (diRatioBen > (2-brushValue)) { return "No Disparate Benefit" }
+			else if (diRatio < 0 && diRatioBen > 2-brushValue) {return "No Disparate Benefit"}
+            else if (diRatio > 0 && minTotal > 0 && diRatio > (2-brushValue)) { return "No Disparate Benefit" }
+			else if (diRatio > 0 && minTotal < 0) {return "N/A"}
             else { return "Disparate Benefit" }
           })   
     })
@@ -380,7 +363,7 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
       .append("path")
         .attr("class", function(d) { return "t" + d.properties.TRACT; })
         .attr("d", function(d) { return geoPath(d); })
-        .style("fill", "blue") /*change map colors*/
+        .style("fill", "royalblue") /*change map colors*/
         .style("opacity",  function(d) { return Math.sqrt(d.properties.MINORITY_HH_PCT);})
 
   tractMap.selectAll(".routes")
@@ -407,44 +390,44 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
       .text("KEY");*/
     tractMap.append("text")
       .style("font-weight", 700)
-      .attr("x", xPos).attr("y", yPos + 5)
+      .attr("x", xPos).attr("y", yPos - 22)
       .text("Percent Minority Population");
 
     //text and colors
     tractMap.append("rect")
-      .style("fill", "blue").style("stroke", "none").style("opacity", .39)
-      .attr("x", xPos).attr("y", yPos + 15).attr("height", "7px").attr("width", height/35);
+      .style("fill", "royalblue").style("stroke", "none").style("opacity", .39)
+      .attr("x", xPos).attr("y", yPos - 12).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
-      .attr("x", xPos + 25).attr("y", yPos + 22)
+      .attr("x", xPos + 25).attr("y", yPos - 5)
       .text("15%");
     tractMap.append("rect")
-      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .55)
-      .attr("x", xPos).attr("y", yPos + 30).attr("height", "7px").attr("width", height/35);
+      .style("fill", "royalblue").style("stroke", "none").style("opacity", .55)
+      .attr("x", xPos).attr("y", yPos + 3).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
-      .attr("x", xPos + 25).attr("y", yPos + 37)
+      .attr("x", xPos + 25).attr("y", yPos + 10)
       .text("30%");
     tractMap.append("rect")
-      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .67)
-      .attr("x", xPos).attr("y", yPos + 45).attr("height", "7px").attr("width", height/35);
+      .style("fill", "royalblue").style("stroke", "none").style("opacity", .67)
+      .attr("x", xPos).attr("y", yPos + 18).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
-      .attr("x", xPos + 25).attr("y", yPos + 52)
+      .attr("x", xPos + 25).attr("y", yPos + 25)
       .text("45%");
     tractMap.append("rect")
-      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .76)
-      .attr("x", xPos).attr("y", yPos + 60).attr("height", "7px").attr("width", height/35);
+      .style("fill", "royalblue").style("stroke", "none").style("opacity", .76)
+      .attr("x", xPos).attr("y", yPos + 33).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
-      .attr("x", xPos + 25).attr("y", yPos + 67)
+      .attr("x", xPos + 25).attr("y", yPos + 40)
       .text("60%");
     tractMap.append("rect")
-      .style("fill", "#EE4000").style("stroke", "none").style("opacity", .85)
-      .attr("x", xPos).attr("y", yPos + 75).attr("height", "7px").attr("width", height/35);
+      .style("fill", "royalblue").style("stroke", "none").style("opacity", .85)
+      .attr("x", xPos).attr("y", yPos + 48).attr("height", "7px").attr("width", height/35);
     tractMap.append("text")
       .style("font-weight", 300)
-      .attr("x", xPos + 25).attr("y", yPos + 82)
+      .attr("x", xPos + 25).attr("y", yPos + 55)
       .text(">75%");
 
 }
@@ -610,7 +593,7 @@ toggler.call(tip);
       .on("mouseout", function(d) { tip.hide(d); })
   // parameters
 var margin = 20,
-  width = $("#slider").width();
+  width = $("#slider").width()/2; //change width here
   height = 40;
 
 
@@ -633,7 +616,7 @@ brush = d3.svg.brush()
   .on("brush", brushed);
 
 var svg = d3.select("#slider").append("svg")
-  .attr("width", width)
+  .attr("width", width) 
   .attr("height", height + margin * 2)
   .append("g")
   // classic transform to position g
@@ -673,7 +656,7 @@ handle.append('text')
 
 slider
   .call(brush.event)
-
+/*
 slider.append("rect")
     .attr("class", "yourChange")
     .attr("x", ratioScale(0))
@@ -682,7 +665,7 @@ slider.append("rect")
     .attr("height", 25)
     .style("fill", "#EE4000")
     .style("fill-opacity", 1)
-
+*/
 function brushed() {
   var value = brush.extent()[0];
   brushValue = brush.extent()[0];
@@ -709,37 +692,46 @@ function brushed() {
   var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
   
   // copied from above
-  d3.selectAll('#calculatedRatioBur')
-		  .text(function() {
-			  if (diRatioBur == 0) {return "N/A"}
-			  else { return d3.round(diRatioBur, 2)}
-		  })
+  
+	d3.selectAll('#calculatedRatioBur')
+	  .text(function() {
+		  if (diRatioBur == 0) {return "N/A"} //needed?
+		  else if (diRatio < 0) {return d3.round(diRatioBur, 2)}
+		  else if (diRatio > 0, minTotal < 0) {return d3.round(diRatio, 2)}
+		  else { return "N/A"}
+	  })
+	  
+	d3.selectAll('#calculatedRatioBen')
+	  .text(function() {
+		  if (diRatioBen == 0) {return "N/A"}
+		  else if (diRatio < 0) {return d3.round(diRatioBen, 2)}
+		  else if (diRatio > 0, minTotal > 0) { return d3.round(diRatio, 2)}
+		  else { return "N/A"}
+	  })	
 		  
-    d3.selectAll('#calculatedRatioBen')
-		  .text(function() {
-			  if (diRatioBen == 0) {return "N/A"}
-			  else { return d3.round(diRatioBen, 2)}
-		  })
-
   d3.selectAll('#isThereImpact')
     .text(function() { 
       if (diRatio < brushValue) { return "No Disparate Impact" }
       else { return "Disparate Impact" }
     })
 
-  d3.selectAll('#isThereBurden')
-    .text(function() { 
-	  if (diRatioBur == 0) { return "N/A"}
-      if (diRatioBur < brushValue) { return "No Disparate Burden" }
-      else { return "Disparate Burden" }
-    })
-	
-   d3.selectAll('#isThereBenefit')
-    .text(function() { 
-	  if (diRatioBen == 0) { return "N/A"}
-      if (diRatioBen > (2-brushValue)) { return "No Disparate Benefit" }
-      else { return "Disparate Benefit" }
-    })   
+	d3.selectAll('#isThereBurden')
+	  .text(function() { 
+		if (diRatioBur == 0) {return "N/A"}
+		else if (diRatio < 0, diRatioBur < brushValue) {return "No Disparate Burden"}
+		else if (diRatio > 0, diRatio < brushValue) { return "No Disparate Burden" }
+		else if (diRatio > 0 && minTotal > 0) {return "N/A"}
+		else { return "Disparate Burden" }
+	  })  
+	  
+	d3.selectAll('#isThereBenefit')
+	  .text(function() { 
+		if (diRatioBen == 0) {return "N/A"}
+		else if (diRatio < 0, diRatioBen > 2-brushValue) {return "No Disparate Benefit"}
+		else if (diRatio > 0, minTotal > 0, diRatio > (2-brushValue)) { return "No Disparate Benefit" }
+		else if (diRatio > 0 && minTotal < 0) {return "N/A"}
+		else { return "Disparate Benefit" }
+	  })    
 
 }//end function brushed()
 
@@ -936,9 +928,9 @@ CTPS.demoApp.generateSavings = function(source) {
         .attr("x", vrhScale(i))
         .attr("y", function(d) { return yScale(d.Route) - 8; })
         .style("fill", function() { 
-          if (i == -100) { return  "red" } 
+          if (i == -100) { return  "orange" } // "rgb(255,198,39)" } 
           else { return "black";}})
-        .style("stroke", "EE4000")
+        .style("stroke", "rgb(182,0,141)")
         .style("stroke-width", 0)
         .attr("width", 28)
         .attr("height", 10)
@@ -962,9 +954,218 @@ CTPS.demoApp.generateSavings = function(source) {
         .style("font-weight", 700)
         .style("font-family", "Open Sans")
   })
+     
 
 
-    
+
+////////////////////////////
+/*
+	function autoSelect(routeName, routeChange) {
+		this.routeName = routeName;
+		this.routeChange = routeChange;
+
+    // If VRH rectangle is clicked
+    // d3.selectAll(".vrhSlider").on("click", function() { 
+     
+	 
+	 //   var routeName = "routeA"; //this.getAttribute("class").split(" ")[0];
+     //   var routeChange = "percent20"; //this.getAttribute("class").split(" ")[1];
+        var letterRef = routeName.split("e")[1];
+        var percentRef = +routeChange.split("t")[1];
+
+        if ( $(this).hasClass("clicked") == false) {
+          //highlight appropriate bus routes on map and on text
+          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
+            .style("font-weight", 700)
+            .style("fill", "EE4000")
+            .classed("clicked", true);
+
+          d3.selectAll("." + routeName).filter(".routes")
+            .style("stroke", "EE4000")
+            .classed("clicked", true);
+
+          d3.selectAll("." + routeName).filter(".minorityChart")
+              .style("fill", "EE4000")
+              .classed("clicked", true);
+
+          var letterRef = routeName.split("e")[1];
+
+// kp: calc of affected minority percent if rect not previously selected		  
+/*
+		  results[0].forEach(function(i){
+            if (i.Route == letterRef) { 
+			
+				if (i.Selected != 0){
+					minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; // i.Selected is the key!
+					popTotal -= i.Wdky_Riders * i.Selected;
+				}	  
+				minTotal += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+                popTotal += i.Wdky_Riders * i.TotalHours * percentRef / 100;
+						
+				if (i.Selected < 0) {	  
+					  minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
+					  popTotalBur -= i.Wdky_Riders * i.Selected; 
+				}
+				if (i.Selected > 0) {
+					  minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
+					  popTotalBen -= i.Wdky_Riders * i.Selected; 
+				}
+				
+				if (percentRef < 0) { 
+					minTotalBur += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBur += i.Wdky_Riders * i.TotalHours * percentRef / 100;  	
+				}
+				if (percentRef > 0) {
+					minTotalBen += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBen += i.Wdky_Riders * i.TotalHours * percentRef / 100;	
+				}           
+			}		
+		  })
+
+//add end of comment here
+
+		minTotalBen = 1200;
+		popTotalBen = 2000; 
+
+          //highlight appropriate VRH rectangles
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("rect")
+              .style("stroke-width", 0)
+              .classed("clicked", false)
+
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("text")
+              .style("fill", "none")
+              .classed("clicked", false)
+
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
+              .style("stroke-width", 2)
+
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
+              .style("fill", "EE4000")
+/*
+            results[0].forEach(function(i){
+              if (i.Route == letterRef) { 
+                if (i.Selected != 0){
+                  vrhSavings -= i.Selected;
+                }
+                vrhSavings += i.TotalHours * percentRef / 100;
+                i.Selected = i.TotalHours * percentRef / 100;
+            }})
+//add end of comment here
+			i.Selected = // !! THIS WILL BE A PROBLEM
+
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
+                .classed("clicked", true)
+        } else {
+          //highlight bus routes and text
+          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
+            .style("font-weight", 300)
+            .style("fill", "black")
+            .classed("clicked", false);
+
+          d3.selectAll("." + routeName).filter(".routes")
+            .style("stroke", "black")
+            .classed("clicked", false);
+
+          d3.selectAll("." + routeName).filter(".minorityChart")
+              .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
+              .classed("clicked", false);
+
+          var letterRef = routeName.split("e")[1];
+
+// kp: calc of affected minority percent if rect previously selected		  
+/*
+          results[0].forEach(function(i){
+            if (i.Route == letterRef) {
+				
+                minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+			    popTotal -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
+				
+				if (percentRef < 0) {
+					minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBur -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
+				}
+				if (percentRef > 0) {
+					minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBen -= i.Wdky_Riders * i.TotalHours * percentRef / 100;		
+				}				
+			}
+          })
+
+//add end of comment here
+          //highlight appropriate VRH rectangles
+          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
+            .style("stroke-width", 0)
+
+          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
+            .style("fill", "none")
+
+          results[0].forEach(function(i){
+            if (i.Route == letterRef) { 
+                vrhSavings -= i.TotalHours * percentRef / 100;
+                i.Selected = 0;
+          }})
+
+          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
+                .classed("clicked", false)
+        }
+        
+        d3.select("#vrhTotSavings").text(d3.round(100 * vrhSavings / globalVRH, 2) + "%")
+        d3.select("#vrhTotSavings-dollars").text(d3.round(vrhSavings, 2) + " hours")
+
+    var diRatio = (100 * minTotal / (popTotal + .01))/41.9; // add if error then NA
+		
+		//new
+		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
+		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
+
+        d3.selectAll(".yourChange")
+          .attr("x", ratioScale(diRatio));
+		
+        d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2));
+		 
+		// new 
+		d3.selectAll('#calculatedRatioBur')
+		  .text(function() {
+			  if (diRatioBur == 0) {return "N/A"}
+			  else { return d3.round(diRatioBur, 2)}
+		  })
+		  
+		d3.selectAll('#calculatedRatioBen')
+		  .text(function() {
+			  if (diRatioBen == 0) {return "N/A"}
+			  else { return d3.round(diRatioBen, 2)}
+		  })		
+		
+//		d3.selectAll('#calculatedRatioBur').text(d3.round(diRatioBur, 2));
+//		d3.selectAll('#calculatedRatioBen').text(d3.round(diRatioBen, 2));
+
+        d3.selectAll('#isThereImpact')
+          .text(function() { 
+            if (diRatio < brushValue) { return "No Disparate Impact" }
+            else { return "Disparate Impact" }
+          })
+		  
+		d3.selectAll('#isThereBurden')
+          .text(function() { 
+		    if (diRatioBur == 0) {return "N/A"}
+            if (diRatioBur < brushValue) { return "No Disparate Burden" }
+            else { return "Disparate Burden" }
+          })  
+		  
+		d3.selectAll('#isThereBenefit')
+          .text(function() { 
+		    if (diRatioBen == 0) {return "N/A"}
+            if (diRatioBen > (2-brushValue)) { return "No Disparate Benefit" }
+            else { return "Disparate Benefit" }
+          })   
+   }
+   
+   autoSelect("routeA", "percent20");
+	//});
+
+ // }); 
+*/
+	 
 }
 
 
