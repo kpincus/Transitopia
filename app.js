@@ -344,16 +344,16 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
   })
 
   var projection = d3.geo.conicConformal()
-    .parallels([41 + 43 / 60, 42 + 41 / 60])
+    .parallels([40 + 43 / 60, 41 + 41 / 60])
     .rotate([71 + 30 / 60, -41 ])
     .scale([60000]) // N.B. The scale and translation vector were determined empirically.
-    .translate([-200,2100]);
+    .translate([-170,2100]);
     
   var geoPath = d3.geo.path().projection(projection); 
 
   var tractMap = d3.select("#map").append("svg")
-                .attr("width", "100%")
-                .attr("height", 500)
+                .attr("width", 480) // "100%")
+                .attr("height", 552)
 
   tractMap.call(tipRoute);
 
@@ -593,7 +593,7 @@ toggler.call(tip);
       .on("mouseout", function(d) { tip.hide(d); })
   // parameters
 var margin = 20,
-  width = $("#slider").width()/2; //change width here
+  width = $("#slider").width()/1.25; //change width here
   height = 40;
 
 
@@ -653,7 +653,7 @@ handle.append("path")
 handle.append('text')
   .text("1.0")
   .attr("transform", "translate(" + (-18) + " ," + (height / 2 - 35) + ")");
-
+  
 slider
   .call(brush.event)
 /*
@@ -778,62 +778,62 @@ CTPS.demoApp.generateSavings = function(source) {
   //Labelling
    toggler.append("text")
     .text("Route")
-    .attr("x", xLabel + 3).attr("y", yLabel + 8)
+    .attr("x", xLabel + 3).attr("y", yLabel + 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Total")
-    .attr("x", xLabel + 70).attr("y", yLabel)
+    .attr("x", xLabel + 85).attr("y", yLabel)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Ridership")
-    .attr("x", xLabel + 70).attr("y", yLabel + 15)
+    .attr("x", xLabel + 85).attr("y", yLabel + 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Percent")
-    .attr("x", xLabel + 140).attr("y", yLabel - 15)
+    .attr("x", xLabel + 165).attr("y", yLabel - 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Minority")
-    .attr("x", xLabel + 140).attr("y", yLabel)
+    .attr("x", xLabel + 165).attr("y", yLabel)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Ridership")
-    .attr("x", xLabel + 140).attr("y", yLabel + 15)
+    .attr("x", xLabel + 165).attr("y", yLabel + 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Existing")
-    .attr("x", xLabel + 200).attr("y", yLabel - 15)
+    .attr("x", xLabel + 240).attr("y", yLabel - 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Service")
-    .attr("x", xLabel + 200).attr("y", yLabel)
+    .attr("x", xLabel + 240).attr("y", yLabel)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
    toggler.append("text")
     .text("Hours")
-    .attr("x", xLabel + 200).attr("y", yLabel + 15)
+    .attr("x", xLabel + 240).attr("y", yLabel + 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Change in")
-    .attr("x", xLabel + 270).attr("y", yLabel - 15)
+    .attr("x", xLabel + 315).attr("y", yLabel - 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
   toggler.append("text")
     .text("Service")
-    .attr("x", xLabel + 270).attr("y", yLabel)
+    .attr("x", xLabel + 315).attr("y", yLabel)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
    toggler.append("text")
     .text("Hours")
-    .attr("x", xLabel + 270).attr("y", yLabel + 15)
+    .attr("x", xLabel + 315).attr("y", yLabel + 15)
     .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
 
 
@@ -860,7 +860,7 @@ CTPS.demoApp.generateSavings = function(source) {
     .enter()
     .append("text")
       .attr("class", function(d) { return "route" + d.Route + " numRiders selection"})
-      .attr("x", 100)
+      .attr("x", 115)
       .attr("y", function(d) { return yScale(d.Route); })
       .attr("fill", "black")
       .text(function(d) { return comma(d.Wdky_Riders); })
@@ -871,7 +871,7 @@ CTPS.demoApp.generateSavings = function(source) {
     .enter()
     .append("text")
       .attr("class", function(d) { return "route" + d.Route + " minPercent selection"})
-      .attr("x", 165)
+      .attr("x", 195)
       .attr("y", function(d) { return yScale(d.Route); })
       .attr("fill", "black")
       .text(function(d) { return comma(d.Minority_Percent) + "%"; })
@@ -882,7 +882,7 @@ CTPS.demoApp.generateSavings = function(source) {
     .enter()
     .append("text")
       .attr("class", function(d) { return "route" + d.Route + " vrhTime selection"})
-      .attr("x", 225)
+      .attr("x", 270)
       .attr("y", function(d) { return yScale(d.Route); })
       .attr("fill", "black")
       .text(function(d) { return d.TotalHours; })
@@ -890,11 +890,11 @@ CTPS.demoApp.generateSavings = function(source) {
 
   vrhScale = d3.scale.ordinal()
               .domain([-100, -30, -20, -10, 0, 10, 20, 30])
-              .rangePoints([310, w - 30])
+              .rangePoints([375, w - 30])
 
   vrhScaleLabels = d3.scale.ordinal()
               .domain(["-100%", "-30%","-20%","-10%","0%","+10%","+20%","+30%",])
-              .rangePoints([310, w - 30])
+              .rangePoints([375, w - 30])
 
   var vrhScaleLength = d3.scale.linear()
                     .domain([0, 60])
@@ -909,12 +909,12 @@ CTPS.demoApp.generateSavings = function(source) {
       .style("font-size", 12)
 
   toggler.append("line")
-    .attr("x1", (vrhScale(0) + vrhScale(10))/2 )
-    .attr("x2", (vrhScale(0) + vrhScale(10))/2)
+    .attr("x1", (vrhScale(0) + vrhScale(10))/2 - 25)
+    .attr("x2", (vrhScale(0) + vrhScale(10))/2 - 25)
     .attr("y1", yScale("A"))
     .attr("y2", yScale("Z"))
-    .style("stroke-dasharray", "2, 1")
-    .style("stroke", "black")
+//    .style("stroke-dasharray", "4, 1")
+    .style("stroke", "slategray")
 
   var increments = [-100, -30, -20, -10, 10, 20, 30]; // APPENDS DATA BELOW!
   increments.forEach(function(i){
@@ -945,7 +945,7 @@ CTPS.demoApp.generateSavings = function(source) {
         .attr("class", function(d) { 
             return "route" + d.Route + " " + "percent" + i + " vrhSlider selection";
         })
-        .attr("x", 290)
+        .attr("x", 345)
         .attr("y", function(d) { return yScale(d.Route); })
         .style("fill", "none")
         .text(function(d) {  return d3.round((d.TotalHours * i / 100)); })
