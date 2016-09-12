@@ -29,6 +29,11 @@ var brush = d3.svg.brush()
   .x(timeScale)
   .extent([startingValue, startingValue])
   .on("brush", brushed);
+  
+var brush2 = d3.svg.brush()
+  .x(timeScale)
+  .extent([startingValue, startingValue])
+  .on("brush", brushed);
 
 var svg = d3.select("body").append("svg")
   .attr("width", width + margin.left + margin.right)

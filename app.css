@@ -85,7 +85,7 @@ text { fill: black; }
 .slider .handle text {
   fill: black;
   text-align: center;
-  font-size: 18px;
+  font-size: 16px; /* changed from 18 */
 }
 
 
@@ -143,6 +143,11 @@ line-height: 1.1;
 .highlighted { 
  color: rgb(182,0,141);
 }
+
+.indented {
+  margin-left: 12px;	
+}
+
 .padded-title {
   margin: 10px;
 }
@@ -176,6 +181,20 @@ a:hover, a:focus, a:active, a.active {
 a.active {
 	color: royalblue;
 }
+
+
+
+/* style the dropdown */
+
+.dropdown-toggle {
+	background-color: white;
+	outline: none;
+	border: white;
+	color: royalblue;
+	font-size: 16px;
+	line-height: 150%;
+}
+
 
 
 /*These elements are only visible to screen readers*/
