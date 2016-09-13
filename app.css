@@ -191,10 +191,22 @@ a.active {
 	outline: none;
 	border: white;
 	color: royalblue;
-	font-size: 16px;
-	line-height: 150%;
+	font-size: 20px;
+	line-height: 1.1;
+//	text-transform: uppercase;
+	font-family:"Arial", sans-serif;
+	font-weight: 700; 
 }
 
+
+/*
+.choiceLowIncome {
+	color: red;
+}
+.dropdown-menu a{
+    color: royalblue !important;
+}
+*/
 
 
 /*These elements are only visible to screen readers*/

@@ -66,300 +66,23 @@ queue()
     CTPS.demoApp.generatePanel(results[0]);
     CTPS.demoApp.generateSavings(results[0]);
 	
-
-
     results[0].forEach(function(i){ globalVRH += +i.TotalHours; })
      d3.select("#target-savings-dollars").text(d3.round(-globalVRH * .05, 2) + " hours")
+	
+	
+////////// start of scenario /////////////////
+
+	 d3.selectAll("#testScenario").on("click", function() {	 // changed
 	 
-	 ///////////////////////
+		var routes = ["routeA", "routeB", "routeG"];
+		var changes = ["percent30", "percent-100", "percent-20"];
 	 
-	 d3.selectAll("#testScenario").on("click", function() {
-		//this.
-		routeName = "routeA";
-		//this.
-		routeChange = "percent30";
-        var letterRef = routeName.split("e")[1];
-        var percentRef = +routeChange.split("t")[1];
-		
-	//	d3.selectAll(".routeA").filter(".routes").classed("clicked", true);
-	//	d3.selectAll(".routeA").filter(".minorityChart").classed("clicked", true);
-		
-        if ( $(this).hasClass("clicked") == false) {
-          //highlight appropriate bus routes on map and on text
-          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
-            .style("font-weight", 700)
-            .style("fill", "EE4000")
-            .classed("clicked", true);
-
-          d3.selectAll("." + routeName).filter(".routes")
-            .style("stroke", "EE4000")
-            .classed("clicked", true);
-
-          d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", "EE4000")
-              .classed("clicked", true);
-
-          
-
-// kp: calc of affected minority percent if rect not previously selected		  
-
-		  results[0].forEach(function(i){
-            if (i.Route == letterRef) { 
-			
-				if (i.Selected != 0){
-					minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; // i.Selected is the key!
-					popTotal -= i.Wdky_Riders * i.Selected;
-				}	  
-				minTotal += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-                popTotal += i.Wdky_Riders * i.TotalHours * percentRef / 100;
-						
-				if (i.Selected < 0) {	  
-					  minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
-					  popTotalBur -= i.Wdky_Riders * i.Selected; 
-				}
-				if (i.Selected > 0) {
-					  minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
-					  popTotalBen -= i.Wdky_Riders * i.Selected; 
-				}
-				
-				if (percentRef < 0) { 
-					minTotalBur += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotalBur += i.Wdky_Riders * i.TotalHours * percentRef / 100;  	
-				}
-				if (percentRef > 0) {
-					minTotalBen += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotalBen += i.Wdky_Riders * i.TotalHours * percentRef / 100;	
-				}           
-			}		
-		  })
-
-//add end of comment here
-
-//		minTotalBen = 1200;
-//		popTotalBen = 2000; 
-
-          //highlight appropriate VRH rectangles
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("rect")
-              .style("stroke-width", 0)
-              .classed("clicked", false)
-
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("text")
-              .style("fill", "none")
-              .classed("clicked", false)
-
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
-              .style("stroke-width", 2)
-
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-              .style("fill", "EE4000")
-
-            results[0].forEach(function(i){
-              if (i.Route == letterRef) { 
-                if (i.Selected != 0){
-                  vrhSavings -= i.Selected;
-                }
-                vrhSavings += i.TotalHours * percentRef / 100;
-                i.Selected = i.TotalHours * percentRef / 100;
-            }})
-//add end of comment here
-//			i.Selected = // !! THIS WILL BE A PROBLEM
-
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
-                .classed("clicked", true)
-        } else {
-          //highlight bus routes and text
-          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
-            .style("font-weight", 300)
-            .style("fill", "black")
-            .classed("clicked", false);
-
-          d3.selectAll("." + routeName).filter(".routes")
-            .style("stroke", "black")
-            .classed("clicked", false);
-
-          d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
-              .classed("clicked", false);
-
-          var letterRef = routeName.split("e")[1];
-
-// kp: calc of affected minority percent if rect previously selected		  
-
-          results[0].forEach(function(i){
-            if (i.Route == letterRef) {
-				
-                minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-			    popTotal -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
-				
-				if (percentRef < 0) {
-					minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotalBur -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
-				}
-				if (percentRef > 0) {
-					minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotalBen -= i.Wdky_Riders * i.TotalHours * percentRef / 100;		
-				}				
-			}
-          })
-
-//add end of comment here
-          //highlight appropriate VRH rectangles
-          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
-            .style("stroke-width", 0)
-
-          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-            .style("fill", "none")
-
-          results[0].forEach(function(i){
-            if (i.Route == letterRef) { 
-                vrhSavings -= i.TotalHours * percentRef / 100;
-                i.Selected = 0;
-          }})
-
-          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
-                .classed("clicked", false)
-        }
-        
-        d3.select("#vrhTotSavings").text(d3.round(100 * vrhSavings / globalVRH, 2) + "%")
-        d3.select("#vrhTotSavings-dollars").text(d3.round(vrhSavings, 2) + " hours")
-
-    var diRatio = (100 * minTotal / (popTotal + .01))/41.9; // add if error then NA
-		
-		//new
-		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
-		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
-
-        d3.selectAll(".yourChange")
-          .attr("x", ratioScale(diRatio));
-		
-        d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2));
-		 
-		// new 
-		d3.selectAll('#calculatedRatioBur')
-		  .text(function() {
-			  if (diRatioBur == 0) {return "N/A"}
-			  else { return d3.round(diRatioBur, 2)}
-		  })
-		  
-		d3.selectAll('#calculatedRatioBen')
-		  .text(function() {
-			  if (diRatioBen == 0) {return "N/A"}
-			  else { return d3.round(diRatioBen, 2)}
-		  })		
-		
-//		d3.selectAll('#calculatedRatioBur').text(d3.round(diRatioBur, 2));
-//		d3.selectAll('#calculatedRatioBen').text(d3.round(diRatioBen, 2));
-
-        d3.selectAll('#isThereImpact')
-          .text(function() { 
-            if (diRatio < brushValue) { return "No Disparate Impact" }
-            else { return "Disparate Impact" }
-          })
-		  
-		d3.selectAll('#isThereBurden')
-          .text(function() { 
-		    if (diRatioBur == 0) {return "N/A"}
-            if (diRatioBur < brushValue) { return "No Disparate Burden" }
-            else { return "Disparate Burden" }
-          })  
-		  
-		d3.selectAll('#isThereBenefit')
-          .text(function() { 
-		    if (diRatioBen == 0) {return "N/A"}
-            if (diRatioBen > (2-brushValue)) { return "No Disparate Benefit" }
-            else { return "Disparate Benefit" }
-          })   
-   
-   
-//   autoSelect("routeA", "percent20");
-	//});
-
- // }); 
-//*/
-});
-
-
-
-/////////////////////////////
-
-
-
-    //highlight rectangles
-    d3.selectAll(".selection").on("mouseover", function() { 
-      if($(this).hasClass("clicked") == false){ 
-            var routeName = this.getAttribute("class").split(" ")[0];
-            
-            d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
-              .style("font-weight", 700)
-              .style("fill", "rgb(182,0,141)") // this was a hashtag
-
-            d3.selectAll("." + routeName).filter(".routes")
-              .style("stroke", "rgb(182,0,141)")
-
-            d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", "rgb(182,0,141)")
-
-            d3.selectAll(".selection") 
-              .style("cursor", "pointer");
-      }
-    })
-
-    d3.selectAll(".selection").on("mouseout", function() { 
-      if($(this).hasClass("clicked") == false){ 
-            var routeName = this.getAttribute("class").split(" ")[0];
-            
-            d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
-              .style("font-weight", 300)
-              .style("fill", "black")
-
-            d3.selectAll("." + routeName).filter(".routes")
-              .style("stroke", "black")
-
-            d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
-      }
-    })
-
-
-    d3.selectAll(".vrhSlider").on("mouseover", function() { 
-      if($(this).hasClass("clicked") == false){
-        d3.selectAll(".vrhSlider").style("cursor", "pointer");
-
-        var routeName = this.getAttribute("class").split(" ")[0];
-        var routeChange = this.getAttribute("class").split(" ")[1];
-
-        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
-          .style("stroke-width", 2)
-
-        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-          .style("fill", "rgb(182,0,141)")
-      }
-    })
-
-    d3.selectAll(".vrhSlider").on("mouseout", function() { 
-      if($(this).hasClass("clicked") == false){
-        var routeName = this.getAttribute("class").split(" ")[0];
-        var routeChange = this.getAttribute("class").split(" ")[1];
-      
-        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
-          .style("stroke-width", 0)
-
-        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-          .style("fill", "none")
-      }
-    })
-
-    // If VRH rectangle is clicked
-	
-//	d3.selectAll(".rect").click();
-	
-
-		
-	//	$(d3.selectAll.filter("rect")).click();
-	
-     d3.selectAll(".vrhSlider").on("click", function() { 
-        var routeName = this.getAttribute("class").split(" ")[0];
-        var routeChange = this.getAttribute("class").split(" ")[1];
+	 for (var i = 0; i < 3; i++) { 
+	 
+		//this.												// changed
+		routeName = routes[i];	//"routeA";					// changed
+		//this.												// changed
+		routeChange = changes[i];	//"percent30";			// changed
         var letterRef = routeName.split("e")[1];
         var percentRef = +routeChange.split("t")[1];
 
@@ -378,7 +101,7 @@ queue()
               .style("fill", "rgb(182,0,141)")
               .classed("clicked", true);
 
-          var letterRef = routeName.split("e")[1];
+        //  var letterRef = routeName.split("e")[1];
 
 // kp: calc of affected minority percent if rect not previously selected		  
 		  results[0].forEach(function(i){
@@ -410,19 +133,6 @@ queue()
 				}           
 			}		
 		  })
-	
-	
-	
-		results[0].forEach(function(i){
-			
-			if (i.Route == "A") {
-				i.Selected = 4;
-			}
-			
-		});
-
-			
-			
 			
           //highlight appropriate VRH rectangles
             d3.selectAll("." + routeName).filter(".vrhSlider").filter("rect")
@@ -517,35 +227,24 @@ queue()
         d3.selectAll(".yourChange")
           .attr("x", ratioScale(diRatio));
 		
-        d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2));
+        d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2).toFixed(2));
 		 
 		// new, just updated this section for new calculations
 		d3.selectAll('#calculatedRatioBur')
 		  .text(function() {
 			  if (diRatioBur == 0) {return "N/A"} //needed?
-			  else if (diRatio < 0) {return d3.round(diRatioBur, 2)}
-			  else if (diRatio > 0 && minTotal < 0) {return d3.round(diRatio, 2)}
+			  else if (diRatio < 0) {return d3.round(diRatioBur, 2).toFixed(2)}
+			  else if (diRatio > 0 && minTotal < 0) {return d3.round(diRatio, 2).toFixed(2)}
 			  else { return "N/A"}
 		  })
 		  
 		d3.selectAll('#calculatedRatioBen')
 		  .text(function() {
 			  if (diRatioBen == 0) {return "N/A"}
-			  else if (diRatio < 0) {return d3.round(diRatioBen, 2)}
-			  else if (diRatio > 0 && minTotal > 0) { return d3.round(diRatio, 2)}
+			  else if (diRatio < 0) {return d3.round(diRatioBen, 2).toFixed(2)}
+			  else if (diRatio > 0 && minTotal > 0) { return d3.round(diRatio, 2).toFixed(2)}
 			  else { return "N/A"}
 		  })		
-		
-//		d3.selectAll('#calculatedRatioBur').text(d3.round(diRatioBur, 2));
-//		d3.selectAll('#calculatedRatioBen').text(d3.round(diRatioBen, 2));
-
-/*
-        d3.selectAll('#isThereImpact')
-          .text(function() { 
-            if (diRatio < brushValue) { return "No Disparate Impact" }
-            else { return "Disparate Impact" }
-          })
-*/
 		  
 		d3.selectAll('#isThereBurden')
           .text(function() { 
@@ -564,9 +263,261 @@ queue()
 			else if (diRatio > 0 && minTotal < 0) {return "N/A"}
             else { return "Disparate Benefit" }
           })   
+	 }}); 
+
+/////////// end of scenario //////////////////
+
+
+    //highlight rectangles
+    d3.selectAll(".selection").on("mouseover", function() { 
+      if($(this).hasClass("clicked") == false){ 
+            var routeName = this.getAttribute("class").split(" ")[0];
+            
+            d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
+              .style("font-weight", 700)
+              .style("fill", "rgb(182,0,141)") // this was a hashtag
+
+            d3.selectAll("." + routeName).filter(".routes")
+              .style("stroke", "rgb(182,0,141)")
+
+            d3.selectAll("." + routeName).filter(".minorityChart")
+              .style("fill", "rgb(182,0,141)")
+
+            d3.selectAll(".selection") 
+              .style("cursor", "pointer");
+      }
     })
 
-  }); 
+    d3.selectAll(".selection").on("mouseout", function() { 
+      if($(this).hasClass("clicked") == false){ 
+            var routeName = this.getAttribute("class").split(" ")[0];
+            
+            d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
+              .style("font-weight", 300)
+              .style("fill", "black")
+
+            d3.selectAll("." + routeName).filter(".routes")
+              .style("stroke", "black")
+
+            d3.selectAll("." + routeName).filter(".minorityChart")
+              .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
+      }
+    })
+
+
+    d3.selectAll(".vrhSlider").on("mouseover", function() { 
+      if($(this).hasClass("clicked") == false){
+        d3.selectAll(".vrhSlider").style("cursor", "pointer");
+
+        var routeName = this.getAttribute("class").split(" ")[0];
+        var routeChange = this.getAttribute("class").split(" ")[1];
+
+        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
+          .style("stroke-width", 2)
+
+        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
+          .style("fill", "rgb(182,0,141)")
+      }
+    })
+
+    d3.selectAll(".vrhSlider").on("mouseout", function() { 
+      if($(this).hasClass("clicked") == false){
+        var routeName = this.getAttribute("class").split(" ")[0];
+        var routeChange = this.getAttribute("class").split(" ")[1];
+      
+        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
+          .style("stroke-width", 0)
+
+        d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
+          .style("fill", "none")
+      }
+    })
+
+    // If VRH rectangle is clicked	
+     d3.selectAll(".vrhSlider").on("click", function() { 
+        var routeName = this.getAttribute("class").split(" ")[0];
+        var routeChange = this.getAttribute("class").split(" ")[1];
+        var letterRef = routeName.split("e")[1];
+        var percentRef = +routeChange.split("t")[1];
+
+        if ( $(this).hasClass("clicked") == false) {
+          //highlight appropriate bus routes on map and on text
+          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
+            .style("font-weight", 700)
+            .style("fill", "rgb(182,0,141)")
+            .classed("clicked", true);
+
+          d3.selectAll("." + routeName).filter(".routes")
+            .style("stroke", "rgb(182,0,141)")
+            .classed("clicked", true);
+
+          d3.selectAll("." + routeName).filter(".minorityChart")
+              .style("fill", "rgb(182,0,141)")
+              .classed("clicked", true);
+
+          var letterRef = routeName.split("e")[1];
+
+// kp: calc of affected minority percent if rect not previously selected		  
+		  results[0].forEach(function(i){
+            if (i.Route == letterRef) { 
+			
+				if (i.Selected != 0){
+					minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; // i.Selected is the key!
+					popTotal -= i.Wdky_Riders * i.Selected;
+				}	  
+				minTotal += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+                popTotal += i.Wdky_Riders * i.TotalHours * percentRef / 100;
+						
+				if (i.Selected < 0) {	  
+					  minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
+					  popTotalBur -= i.Wdky_Riders * i.Selected; 
+				}
+				if (i.Selected > 0) {
+					  minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
+					  popTotalBen -= i.Wdky_Riders * i.Selected; 
+				}
+				
+				if (percentRef < 0) { 
+					minTotalBur += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBur += i.Wdky_Riders * i.TotalHours * percentRef / 100;  	
+				}
+				if (percentRef > 0) {
+					minTotalBen += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBen += i.Wdky_Riders * i.TotalHours * percentRef / 100;	
+				}           
+			}		
+		  })			
+			
+          //highlight appropriate VRH rectangles
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("rect")
+              .style("stroke-width", 0)
+              .classed("clicked", false)
+
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("text")
+              .style("fill", "none")
+              .classed("clicked", false)
+
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
+              .style("stroke-width", 2)
+
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
+              .style("fill", "rgb(182,0,141)")
+
+            results[0].forEach(function(i){
+              if (i.Route == letterRef) { 
+                if (i.Selected != 0){
+                  vrhSavings -= i.Selected;
+                }
+                vrhSavings += i.TotalHours * percentRef / 100;
+                i.Selected = i.TotalHours * percentRef / 100;
+            }})
+
+            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
+                .classed("clicked", true)
+        } else {
+          //highlight bus routes and text
+          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
+            .style("font-weight", 300)
+            .style("fill", "black")
+            .classed("clicked", false);
+
+          d3.selectAll("." + routeName).filter(".routes")
+            .style("stroke", "black")
+            .classed("clicked", false);
+
+          d3.selectAll("." + routeName).filter(".minorityChart")
+              .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
+              .classed("clicked", false);
+
+          var letterRef = routeName.split("e")[1];
+
+// kp: calc of affected minority percent if rect previously selected		  
+          results[0].forEach(function(i){
+            if (i.Route == letterRef) {
+				
+                minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+			    popTotal -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
+				
+				if (percentRef < 0) {
+					minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBur -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
+				}
+				if (percentRef > 0) {
+					minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
+					popTotalBen -= i.Wdky_Riders * i.TotalHours * percentRef / 100;		
+				}				
+			}
+          })
+
+          //highlight appropriate VRH rectangles
+          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
+            .style("stroke-width", 0)
+
+          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
+            .style("fill", "none")
+
+          results[0].forEach(function(i){
+            if (i.Route == letterRef) { 
+                vrhSavings -= i.TotalHours * percentRef / 100;
+                i.Selected = 0;
+          }})
+
+          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
+                .classed("clicked", false)
+        }
+        
+        d3.select("#vrhTotSavings").text(d3.round(100 * vrhSavings / globalVRH, 2) + "%")
+        d3.select("#vrhTotSavings-dollars").text(d3.round(vrhSavings, 2) + " hours")
+
+      //Update front-end numbers
+	  	  
+        var diRatio = (100 * minTotal / (popTotal + .01))/41.9; 
+		
+		//new
+		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
+		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
+
+        d3.selectAll(".yourChange")
+          .attr("x", ratioScale(diRatio));
+		
+        d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2).toFixed(2));
+		 
+		// new, just updated this section for new calculations
+		d3.selectAll('#calculatedRatioBur')
+		  .text(function() {
+			  if (diRatioBur == 0) {return "N/A"} //needed?
+			  else if (diRatio < 0) {return d3.round(diRatioBur, 2).toFixed(2)}
+			  else if (diRatio > 0 && minTotal < 0) {return d3.round(diRatio, 2).toFixed(2)}
+			  else { return "N/A"}
+		  })
+		  
+		d3.selectAll('#calculatedRatioBen')
+		  .text(function() {
+			  if (diRatioBen == 0) {return "N/A"}
+			  else if (diRatio < 0) {return d3.round(diRatioBen, 2).toFixed(2)}
+			  else if (diRatio > 0 && minTotal > 0) { return d3.round(diRatio, 2).toFixed(2)}
+			  else { return "N/A"}
+		  })		
+		  
+		d3.selectAll('#isThereBurden')
+          .text(function() { 
+		    if (diRatioBur == 0) {return "N/A"}
+			else if (diRatio < 0 && diRatioBur < brushValue) {return "No Disparate Burden"}
+            else if (diRatio > 0 && minTotal < 0 && diRatio < brushValue) { return "No Disparate Burden" }
+			else if (diRatio > 0 && minTotal > 0) {return "N/A"}
+            else { return "Disparate Burden" }
+          })  
+		  
+		d3.selectAll('#isThereBenefit')
+          .text(function() { 
+		    if (diRatioBen == 0) {return "N/A"}
+			else if (diRatio < 0 && diRatioBen > 2-brushValue) {return "No Disparate Benefit"}
+            else if (diRatio > 0 && minTotal > 0 && diRatio > (2-brushValue)) { return "No Disparate Benefit" }
+			else if (diRatio > 0 && minTotal < 0) {return "N/A"}
+            else { return "Disparate Benefit" }
+          })  
+    })		  
+}); 
 
   
   
@@ -588,7 +539,7 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
   var geoPath = d3.geo.path().projection(projection); 
 
   var tractMap = d3.select("#map").append("svg")
-                .attr("width", 480) // "100%")
+                .attr("width", "95%") //480) // "100%")
                 .attr("height", 552)
 
   tractMap.call(tipRoute);
@@ -627,7 +578,7 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
     tractMap.append("text")
       .style("font-weight", 700)
       .attr("x", xPos).attr("y", yPos - 22)
-      .text("Percent Minority Population");
+      .text("Minority Population");
 
     //text and colors
     tractMap.append("rect")
@@ -665,7 +616,6 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
       .style("font-weight", 300)
       .attr("x", xPos + 25).attr("y", yPos + 55)
       .text(">75%");
-
 }
 
 CTPS.demoApp.generatePanel = function(source) {
@@ -678,6 +628,7 @@ CTPS.demoApp.generatePanel = function(source) {
       i.Selected = 0;	  
   })
 
+  
   var height = 600; 
 
   var toggler = d3.select("#chart").append("svg")
@@ -706,6 +657,7 @@ CTPS.demoApp.generatePanel = function(source) {
     .call(xAxis)
     .selectAll("text").style("font-size", 10)
 
+/*	
 //Labelling
 var yPos = 55;
 
@@ -827,7 +779,7 @@ toggler.call(tip);
       .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
       .on("mouseenter", function(d) { tip.show(d); })
       .on("mouseout", function(d) { tip.hide(d); })
-
+*/
 	  
 // parameters
 var margin = 10,
@@ -845,7 +797,6 @@ ratioScale = d3.scale.linear()
 // initial value
 var startingValue = d3.round(1.0, 2) ;
 
-//////////
 
 // defines brush
 brush = d3.svg.brush()
@@ -869,24 +820,6 @@ svg.append("g")
   .ticks(0))
   //.tickValues([.7, 1.3]))
   .attr("class", "halo");
-  
-/*
- // fix this
-svg.append("text")
-  .attr("class", "x label")
-  .attr("text-anchor", "start")
-  .attr("x", - 5.5 * margin)
-  .attr("y", height/2 - 2) // - 35)
-  .text("Benefit")
-  
-
-svg.append("text")
-  .attr("class", "x label")
-  .attr("text-anchor", "end")
-  .attr("x", width + margin)
-  .attr("y", height - 50)
-  .text("Burden")
-*/ 
   
 
 var slider = svg.append("g")
@@ -935,8 +868,7 @@ handle2.append('text')
   .attr("transform", "translate(" + (-30) + " ," + (height / 2 + 50) + ")");
   
   
-  
-  
+ 
 slider
   .call(brush.event)
 
@@ -947,7 +879,7 @@ slider.append("rect")
     .attr("y", 0)
     .attr("width", 5)
     .attr("height", 25)
-    .style("fill", "#EE4000")
+    .style("fill", "#"rgb(182,0,141)"")
     .style("fill-opacity", 1)
 */
 
@@ -973,11 +905,10 @@ function brushed() {
   handle2.attr("transform", "translate(" + ratioScale(2-value) + ",0)")
   handle2.select('text').text(d3.round(2-value, 2).toFixed(2));
   
-  
-
-  d3.select("#sliderRatio").text(d3.round(value, 2));
-  d3.select("#sliderRatioCopy").text(d3.round(value, 2));
-  d3.select("#sliderRatioOpp").text(d3.round(2-value, 2));
+ 
+  d3.select("#sliderRatio").text(d3.round(value, 2).toFixed(2));
+  d3.select("#sliderRatioCopy").text(d3.round(value, 2).toFixed(2));
+  d3.select("#sliderRatioOpp").text(d3.round(2-value, 2).toFixed(2));
   d3.select('.affected')
       .attr("width", xScaleLength(value * 41.9))
 
@@ -993,16 +924,16 @@ function brushed() {
 	d3.selectAll('#calculatedRatioBur')
 	  .text(function() {
 		  if (diRatioBur == 0) {return "N/A"} //needed?
-		  else if (diRatio < 0) {return d3.round(diRatioBur, 2)}
-		  else if (diRatio > 0, minTotal < 0) {return d3.round(diRatio, 2)}
+		  else if (diRatio < 0) {return d3.round(diRatioBur, 2).toFixed(2)}
+		  else if (diRatio > 0, minTotal < 0) {return d3.round(diRatio, 2).toFixed(2)}
 		  else { return "N/A"}
 	  })
 	  
 	d3.selectAll('#calculatedRatioBen')
 	  .text(function() {
 		  if (diRatioBen == 0) {return "N/A"}
-		  else if (diRatio < 0) {return d3.round(diRatioBen, 2)}
-		  else if (diRatio > 0, minTotal > 0) { return d3.round(diRatio, 2)}
+		  else if (diRatio < 0) {return d3.round(diRatioBen, 2).toFixed(2)}
+		  else if (diRatio > 0, minTotal > 0) { return d3.round(diRatio, 2).toFixed(2)}
 		  else { return "N/A"}
 	  })	
 		  
@@ -1031,8 +962,6 @@ function brushed() {
 	  })    
 
 }//end function brushed()
-
-
 
 }
 
@@ -1136,8 +1065,8 @@ CTPS.demoApp.generateSavings = function(source) {
 
   toggler.append("text")
     .text("Change in Service Hours")
-    .attr("x", xLabel + 535).attr("y", yLabel - 15)
-    .style("text-anchor", "end").style("font-size", 12).style("font-weight", 700)
+    .attr("x", ((w - 30 - 375) / (7/4)) + 380).attr("y", yLabel - 15)
+    .style("text-anchor", "middle").style("font-size", 12).style("font-weight", 700)
 
   //Filling in the table
   toggler.selectAll(".letterName")
@@ -1206,12 +1135,12 @@ CTPS.demoApp.generateSavings = function(source) {
       .style("font-size", 12)
 
   toggler.append("line")
-    .attr("x1", (vrhScale(0) + vrhScale(10))/2 - 25)
-    .attr("x2", (vrhScale(0) + vrhScale(10))/2 - 25)
-    .attr("y1", yScale("A"))
-    .attr("y2", yScale("Z"))
-//    .style("stroke-dasharray", "4, 1")
-    .style("stroke", "slategray")
+    .attr("x1", (w - 30 - 375) / (7/4) + 387) 	//(vrhScale(0) + vrhScale(10))/2 - 25)
+    .attr("x2", (w - 30 - 375) / (7/4) + 387)	//(vrhScale(0) + vrhScale(10))/2 - 25)
+    .attr("y1", yScale("A") - 25)
+    .attr("y2", yScale("Z") + 5)
+    .style("stroke-dasharray", "2, 1")
+    .style("stroke", "gray")
 
   var increments = [-100, -30, -20, -10, 10, 20, 30]; // APPENDS DATA BELOW!
   increments.forEach(function(i){
@@ -1253,230 +1182,3 @@ CTPS.demoApp.generateSavings = function(source) {
   })
   
  } 
-
-     
-
-
-	
-	/*
-
-
-////////////////////////////
-
-	//function autoSelect(routeName, routeChange) {
-		this.routeName = "routeA";
-		this.routeChange = "percent30";
-
-    // If VRH rectangle is clicked
-    // d3.selectAll(".vrhSlider").on("click", function() { 
-     
-	 
-	 //   var routeName = "routeA"; //this.getAttribute("class").split(" ")[0];
-     //   var routeChange = "percent20"; //this.getAttribute("class").split(" ")[1];
-        var letterRef = routeName.split("e")[1];
-        var percentRef = +routeChange.split("t")[1];
-		
-	
-
-        if ( $(this).hasClass("clicked") == false) {
-          //highlight appropriate bus routes on map and on text
-          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
-            .style("font-weight", 700)
-            .style("fill", "EE4000")
-            .classed("clicked", true);
-
-          d3.selectAll("." + routeName).filter(".routes")
-            .style("stroke", "EE4000")
-            .classed("clicked", true);
-
-          d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", "EE4000")
-              .classed("clicked", true);
-
-          var letterRef = routeName.split("e")[1];
-
-// kp: calc of affected minority percent if rect not previously selected		  
-
-		  results[0].forEach(function(i){
-            if (i.Route == letterRef) { 
-			
-				if (i.Selected != 0){
-					minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected; // i.Selected is the key!
-					popTotal -= i.Wdky_Riders * i.Selected;
-				}	  
-				minTotal += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-                popTotal += i.Wdky_Riders * i.TotalHours * percentRef / 100;
-						
-				if (i.Selected < 0) {	  
-					  minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
-					  popTotalBur -= i.Wdky_Riders * i.Selected; 
-				}
-				if (i.Selected > 0) {
-					  minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.Selected;
-					  popTotalBen -= i.Wdky_Riders * i.Selected; 
-				}
-				
-				if (percentRef < 0) { 
-					minTotalBur += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotalBur += i.Wdky_Riders * i.TotalHours * percentRef / 100;  	
-				}
-				if (percentRef > 0) {
-					minTotalBen += i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotalBen += i.Wdky_Riders * i.TotalHours * percentRef / 100;	
-				}           
-			}		
-		  })
-
-//add end of comment here
-
-		minTotalBen = 1200;
-		popTotalBen = 2000; 
-
-          //highlight appropriate VRH rectangles
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("rect")
-              .style("stroke-width", 0)
-              .classed("clicked", false)
-
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("text")
-              .style("fill", "none")
-              .classed("clicked", false)
-
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
-              .style("stroke-width", 2)
-
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-              .style("fill", "EE4000")
-
-            results[0].forEach(function(i){
-              if (i.Route == letterRef) { 
-                if (i.Selected != 0){
-                  vrhSavings -= i.Selected;
-                }
-                vrhSavings += i.TotalHours * percentRef / 100;
-                i.Selected = i.TotalHours * percentRef / 100;
-            }})
-//add end of comment here
-			i.Selected = // !! THIS WILL BE A PROBLEM
-
-            d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
-                .classed("clicked", true)
-        } else {
-          //highlight bus routes and text
-          d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
-            .style("font-weight", 300)
-            .style("fill", "black")
-            .classed("clicked", false);
-
-          d3.selectAll("." + routeName).filter(".routes")
-            .style("stroke", "black")
-            .classed("clicked", false);
-
-          d3.selectAll("." + routeName).filter(".minorityChart")
-              .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
-              .classed("clicked", false);
-
-          var letterRef = routeName.split("e")[1];
-
-// kp: calc of affected minority percent if rect previously selected		  
-/*
-          results[0].forEach(function(i){
-            if (i.Route == letterRef) {
-				
-                minTotal -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-			    popTotal -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
-				
-				if (percentRef < 0) {
-					minTotalBur -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotalBur -= i.Wdky_Riders * i.TotalHours * percentRef / 100;
-				}
-				if (percentRef > 0) {
-					minTotalBen -= i.Wdky_Riders * (i.Minority_Percent / 100) * i.TotalHours * (percentRef / 100);
-					popTotalBen -= i.Wdky_Riders * i.TotalHours * percentRef / 100;		
-				}				
-			}
-          })
-
-//add end of comment here
-          //highlight appropriate VRH rectangles
-          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("rect")
-            .style("stroke-width", 0)
-
-          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange).filter("text")
-            .style("fill", "none")
-
-          results[0].forEach(function(i){
-            if (i.Route == letterRef) { 
-                vrhSavings -= i.TotalHours * percentRef / 100;
-                i.Selected = 0;
-          }})
-
-          d3.selectAll("." + routeName).filter(".vrhSlider").filter("." + routeChange)
-                .classed("clicked", false)
-        }
-        
-        d3.select("#vrhTotSavings").text(d3.round(100 * vrhSavings / globalVRH, 2) + "%")
-        d3.select("#vrhTotSavings-dollars").text(d3.round(vrhSavings, 2) + " hours")
-
-    var diRatio = (100 * minTotal / (popTotal + .01))/41.9; // add if error then NA
-		
-		//new
-		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
-		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
-
-        d3.selectAll(".yourChange")
-          .attr("x", ratioScale(diRatio));
-		
-        d3.selectAll('#calculatedRatio').text(d3.round(diRatio, 2));
-		 
-		// new 
-		d3.selectAll('#calculatedRatioBur')
-		  .text(function() {
-			  if (diRatioBur == 0) {return "N/A"}
-			  else { return d3.round(diRatioBur, 2)}
-		  })
-		  
-		d3.selectAll('#calculatedRatioBen')
-		  .text(function() {
-			  if (diRatioBen == 0) {return "N/A"}
-			  else { return d3.round(diRatioBen, 2)}
-		  })		
-		
-//		d3.selectAll('#calculatedRatioBur').text(d3.round(diRatioBur, 2));
-//		d3.selectAll('#calculatedRatioBen').text(d3.round(diRatioBen, 2));
-
-        d3.selectAll('#isThereImpact')
-          .text(function() { 
-            if (diRatio < brushValue) { return "No Disparate Impact" }
-            else { return "Disparate Impact" }
-          })
-		  
-		d3.selectAll('#isThereBurden')
-          .text(function() { 
-		    if (diRatioBur == 0) {return "N/A"}
-            if (diRatioBur < brushValue) { return "No Disparate Burden" }
-            else { return "Disparate Burden" }
-          })  
-		  
-		d3.selectAll('#isThereBenefit')
-          .text(function() { 
-		    if (diRatioBen == 0) {return "N/A"}
-            if (diRatioBen > (2-brushValue)) { return "No Disparate Benefit" }
-            else { return "Disparate Benefit" }
-          })   
-   }
-   
-   autoSelect("routeA", "percent20");
-	//});
-
- // }); 
-*/
-	 
-
-
-	//	d3.selectAll("#testButton").filter(".routeA").filter(".vrhSlider").filter(".percent30").filter("rect");
-	 
-	 
-		//$("#testButton").click();
-
-
-

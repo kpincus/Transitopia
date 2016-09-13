@@ -47,18 +47,32 @@
 <!-- Row 2 -->
 	
 	<div class="col-md-4" id="first-third">
-	<h2 class="subtitle">Welcome</h2><br> <!--Select Analysis Type</h2><br>-->
+<!--	<h2 class="subtitle">Welcome</h2><br> <!--Select Analysis Type</h2><br>
+	
+	<br>
+-->	
+	<div class="dropdown">
+	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Choose a service change scenario
+	<span class="caret"></span></button>
+	<ul class="dropdown-menu">
+	<li><a href="#" id="testScenario" class="active">Increase service on high-ridership routes</a></li>
+	<li><a href="#">Remove a route and increase parallel service</a></li>
+	<li><a href="#">Decrease service on low-performing routes</a></li>
+	</ul>
+	</div>	
+	
+	<br><br><br>
+<!--	
 	<h3><a href="#" class="choiceMinority active"> Routes by Percent Minority Ridership </a></h3>
 	<h3><a href="index2.php" class="choiceLowIncome"> Routes by Percent Low Income Ridership</a></h3><br>
 	
 	<!--	<div class="col-md-2">	-->
 	<div class="dropdown">
-	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Scenarios
+	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Choose an equity analysis type
 	<span class="caret"></span></button>
 	<ul class="dropdown-menu">
-	<li><a href="#" id="testScenario">Scenario 1</a></li>
-	<li><a href="#">Scenario 2</a></li>
-	<li><a href="#">Scenario 3</a></li>
+	<li><a href="#" class="choiceMinority active">Disparate impact (minority ridership)</a></li>
+	<li><a href="#" class="choiceLowIncome">Disproportionate burden (low-income ridership)</a></li>
 	</ul>
 	</div>
 	
