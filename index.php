@@ -22,7 +22,7 @@
 <script src="bootstrap.min.js"></script>
 <link rel="stylesheet" href="bootstrap.min.css"/>
 <!-- Custom Styling --> 
-<link rel="stylesheet" href="app.css"/>
+<link rel="stylesheet" href="app_minority.css"/>
 
 <!-- Leaflet -->
 <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
@@ -55,9 +55,10 @@
 	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Choose a service change scenario
 	<span class="caret"></span></button>
 	<ul class="dropdown-menu">
-	<li><a href="#" id="testScenario" class="active">Increase service on high-ridership routes</a></li>
-	<li><a href="#">Remove a route and increase parallel service</a></li>
-	<li><a href="#">Decrease service on low-performing routes</a></li>
+	<li><a href="index_increase_minority.php">Increase service on high-ridership routes</a></li>
+	<li><a href="index_remove_minority.php">Remove a route and increase parallel service</a></li>
+	<li><a href="index_decrease_minority.php">Decrease service on low-performing routes</a></li>
+	<li><a href="#" class="active">[clear scenarios]</a></li>
 	</ul>
 	</div>	
 	
@@ -71,8 +72,8 @@
 	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Choose an equity analysis type
 	<span class="caret"></span></button>
 	<ul class="dropdown-menu">
-	<li><a href="#" class="choiceMinority active">Disparate impact (minority ridership)</a></li>
-	<li><a href="#" class="choiceLowIncome">Disproportionate burden (low-income ridership)</a></li>
+	<li><a href="#" class="active">Disparate impact (minority ridership)</a></li>
+	<li><a href="index_none_lowincome.php">Disproportionate burden (low-income ridership)</a></li>
 	</ul>
 	</div>
 	
@@ -122,7 +123,7 @@
 </div>
 
 
-<script src="app.js"></script>
+<script src="app_none_minority.js"></script>
 <script src="slider.js"></script>
 
 </body>
