@@ -824,8 +824,8 @@ function brushed() {
 	d3.selectAll('#isThereBurden')
 	  .text(function() { 
 		if (diRatioBur == 0) {return "N/A"}
-		else if (diRatio < 0, diRatioBur < brushValue) {return "No Disparate Burden"}
-		else if (diRatio > 0, diRatio < brushValue) { return "No Disparate Burden" }
+		else if (diRatio < 0 && diRatioBur < brushValue) {return "No Disparate Burden"} // copied another instance of this if statement and squashed the bug!
+        else if (diRatio > 0 && minTotal < 0 && diRatio < brushValue) { return "No Disparate Burden"}
 		else if (diRatio > 0 && minTotal > 0) {return "N/A"}
 		else { return "Disparate Burden" }
 	  })  
@@ -833,8 +833,8 @@ function brushed() {
 	d3.selectAll('#isThereBenefit')
 	  .text(function() { 
 		if (diRatioBen == 0) {return "N/A"}
-		else if (diRatio < 0, diRatioBen > 2-brushValue) {return "No Disparate Benefit"}
-		else if (diRatio > 0, minTotal > 0, diRatio > (2-brushValue)) { return "No Disparate Benefit" }
+		else if (diRatio < 0 && diRatioBen > 2-brushValue) {return "No Disparate Benefit"}
+        else if (diRatio > 0 && minTotal > 0 && diRatio > (2-brushValue)) { return "No Disparate Benefit" }
 		else if (diRatio > 0 && minTotal < 0) {return "N/A"}
 		else { return "Disparate Benefit" }
 	  })    
