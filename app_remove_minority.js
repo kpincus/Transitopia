@@ -74,7 +74,7 @@ queue()
 
 	// d3.selectAll("#testScenario").on("click", function() {	 // changed
 	 
-		var routes = ["routeK", "routeF", "routeO", "routeS"];
+		var routes = ["routeO", "routeF", "routeK", "routeS"];
 		var changes = ["percent-100", "percent20", "percent20", "percent20"];
 	 
 	 for (var i = 0; i < 4; i++) { 
@@ -218,11 +218,11 @@ queue()
 
       //Update front-end numbers
 	  	  
-        var diRatio = (100 * minTotal / (popTotal + .01))/41.9; 
+        var diRatio = (100 * minTotal / (popTotal + .01))/44.7; 
 		
 		//new
-		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
-		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
+		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/44.7;
+		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/44.7;
 
         d3.selectAll(".yourChange")
           .attr("x", ratioScale(diRatio));
@@ -472,11 +472,11 @@ queue()
 
       //Update front-end numbers
 	  	  
-        var diRatio = (100 * minTotal / (popTotal + .01))/41.9; 
+        var diRatio = (100 * minTotal / (popTotal + .01))/44.7; 
 		
 		//new
-		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
-		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
+		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/44.7;
+		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/44.7;
 
         d3.selectAll(".yourChange")
           .attr("x", ratioScale(diRatio));
@@ -552,7 +552,7 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
         .attr("class", function(d) { return "t" + d.properties.TRACT; })
         .attr("d", function(d) { return geoPath(d); })
         .style("fill", "royalblue") /*change map colors*/
-        .style("opacity",  function(d) { return Math.sqrt(d.properties.MINORITY_HH_PCT);})
+        .style("opacity",  function(d) { return Math.sqrt(d.properties.MINORITY_PCT);})
 
   tractMap.selectAll(".routes")
       .data(routes)
@@ -661,7 +661,7 @@ CTPS.demoApp.generatePanel = function(source) {
 	  
 // parameters
 var margin = 10,
-  width = $("#slider").width()/1.15; //change width here
+  width = $("#slider").width()/1.5; //change width here
   height = 80;
 
 
@@ -673,7 +673,7 @@ ratioScale = d3.scale.linear()
 
 
 // initial value
-var startingValue = d3.round(1.0, 2) ;
+var startingValue = d3.round(1.2, 2) ;
 
 
 // defines brush
@@ -788,14 +788,14 @@ function brushed() {
   d3.select("#sliderRatioCopy").text(d3.round(value, 2).toFixed(2));
   d3.select("#sliderRatioOpp").text(d3.round(2-value, 2).toFixed(2));
   d3.select('.affected')
-      .attr("width", xScaleLength(value * 41.9))
+      .attr("width", xScaleLength(value * 44.7))
 
   //Update front-end numbers
-  var diRatio = (100 * minTotal / (popTotal + .01))/41.9;
+  var diRatio = (100 * minTotal / (popTotal + .01))/44.7;
   
   //added this here
-  var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
-  var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
+  var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/44.7;
+  var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/44.7;
   
   // copied from above
   

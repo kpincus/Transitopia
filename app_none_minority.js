@@ -218,11 +218,11 @@ queue()
 
       //Update front-end numbers
 	  	  
-        var diRatio = (100 * minTotal / (popTotal + .01))/41.9; 
+        var diRatio = (100 * minTotal / (popTotal + .01))/44.7; 
 		
 		//new
-		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
-		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
+		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/44.7;
+		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/44.7;
 
         d3.selectAll(".yourChange")
           .attr("x", ratioScale(diRatio));
@@ -471,11 +471,11 @@ queue()
 
       //Update front-end numbers
 	  	  
-        var diRatio = (100 * minTotal / (popTotal + .01))/41.9; 
+        var diRatio = (100 * minTotal / (popTotal + .01))/44.7; 
 		
 		//new
-		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
-		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
+		var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/44.7;
+		var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/44.7;
 
         d3.selectAll(".yourChange")
           .attr("x", ratioScale(diRatio));
@@ -551,7 +551,7 @@ CTPS.demoApp.generateMap = function(tracts, routes) {
         .attr("class", function(d) { return "t" + d.properties.TRACT; })
         .attr("d", function(d) { return geoPath(d); })
         .style("fill", "royalblue") /*change map colors*/
-        .style("opacity",  function(d) { return Math.sqrt(d.properties.MINORITY_HH_PCT);})
+        .style("opacity",  function(d) { return Math.sqrt(d.properties.MINORITY_PCT);})
 
   tractMap.selectAll(".routes")
       .data(routes)
@@ -657,133 +657,11 @@ CTPS.demoApp.generatePanel = function(source) {
     .call(xAxis)
     .selectAll("text").style("font-size", 10)
 
-/*	
-//Labelling
-var yPos = 55;
 
-  toggler.append("text")
-    .text("Route")
-    .attr("x", 25)
-    .attr("y", yPos + 35)
-    .style("text-anchor", "middle")
-    .style("font-weight", 300)
-
-  toggler.append("text")
-    .text("Percent Minority Ridership")
-    .attr("x", 210)
-    .attr("y", yPos + 20)
-    .style("text-anchor", "middle")
-    .style("font-weight", 300)
-    .style("font-size", 12)
-
-//Key 
-
-toggler.append("text")
-    .text("KEY:")
-    .attr("x", 10)
-    .attr("y", yPos - 32)
-    .style("font-size", 11)
-
-toggler.append("text")
-    .text("90% Confidence Interval")
-    .attr("x", 145)
-    .attr("y", yPos - 17)
-    .style("font-weight", 300)
-    .style("font-size", 10)
-
-toggler.append("text")
-    .text("% Minority")
-    .attr("x", 145)
-    .attr("y", yPos - 43)
-    .style("font-weight", 300)
-    .style("font-size", 10)
-
-toggler.append("rect") //CI key
-    .attr("x", 55)
-    .attr("y", yPos - 40)
-    .attr("width", 50)
-    .attr("height", 10)
-    .style("fill", "black")
-    .style("fill-opacity", .3)
-
-toggler.append("path") //path for CI key
-    .attr("d", "M 53 27 L 53 30 L 108 30 L 108 27 L 108 30 L 81 30 L 81 35 L 140 35")
-    .style("stroke", "black")
-    .style("stroke-width", 1)
-
-toggler.append("rect") //% key
-    .attr("x", 80)
-    .attr("y", yPos - 40)
-    .attr("width", 2)
-    .attr("height", 10)
-    .style("fill", "black")
-    .style("fill-opacity", 1)
-
-toggler.append("path")
-    .attr("d", "M 81 12 L 81 8 L 140 8")
-    .style("stroke", "black")
-    .style("stroke-width", 1)
-
-//Graphing
-  toggler.selectAll(".letterLabel")
-    .data(source)
-    .enter()
-    .append("text")
-    .text(function(d) { return d.Route})
-    .attr("class", function(d) { return "route" + d.Route + " letterName selection"})
-    .attr("x", 15)
-    .attr("y", function(d) { return yScale(d.Route) + 10})
-    .style("fill", "black")
-    .style("font-weight", 300)
-
-//graph DI coverage
-  toggler.append("rect")
-    .attr("class", "affected")
-    .attr("x", xScale(0))
-    .attr("y", 105)
-    .attr("width", xScaleLength(41.9))
-    .attr("height", height - 55)
-    .style("fill", "black")
-    .style("fill-opacity", .05)
-
-toggler.call(tip);
-
-//graph confidence intervals (grey)
-  toggler.selectAll(".minorityCI")
-    .data(source)
-    .enter()
-    .append("rect")
-      .attr("class", function(d) { return "route" + d.Route + " minorityChart";})
-      .attr("x", function(d) { return xScale(d.MIN_90pct_Lower); })
-      .attr("y", function(d) { return yScale(d.Route); })
-      .attr("height", 10)
-      .attr("width", function(d) { return xScaleLength(d.MIN_90pct_Upper - d.MIN_90pct_Lower); })
-      .style("fill-opacity", .3)
-      .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
-      .style("stroke-width", 1)
-      .style("stroke", "none")
-      .on("mouseenter", function(d) { tip.show(d); })
-      .on("mouseout", function(d) { tip.hide(d); })
-
-//graph minority percentage (black bar)
-  toggler.selectAll(".minorityPercent")
-    .data(source)
-    .enter()
-    .append("rect")
-      .attr("class", function(d) { return "route" + d.Route + " minorityChart";})
-      .attr("x", function(d) { return xScale(d.Minority_Percent); })
-      .attr("y", function(d) { return yScale(d.Route); })
-      .attr("height", 10)
-      .attr("width", 2)
-      .style("fill-opacity", 1)
-      .style("fill", function(d) { return colorScale(d.Minority_Percent/100)})
-      .on("mouseenter", function(d) { tip.show(d); })
-      .on("mouseout", function(d) { tip.hide(d); })
-*/
 	  
 // parameters
 var margin = 10,
-  width = $("#slider").width()/1.15; //change width here
+  width = $("#slider").width()/1.5; //change width here
   height = 80;
 
 
@@ -795,7 +673,7 @@ ratioScale = d3.scale.linear()
 
 
 // initial value
-var startingValue = d3.round(1.0, 2) ;
+var startingValue = d3.round(1.2, 2) ;
 
 
 // defines brush
@@ -910,14 +788,14 @@ function brushed() {
   d3.select("#sliderRatioCopy").text(d3.round(value, 2).toFixed(2));
   d3.select("#sliderRatioOpp").text(d3.round(2-value, 2).toFixed(2));
   d3.select('.affected')
-      .attr("width", xScaleLength(value * 41.9))
+      .attr("width", xScaleLength(value * 44.7))
 
   //Update front-end numbers
-  var diRatio = (100 * minTotal / (popTotal + .01))/41.9;
+  var diRatio = (100 * minTotal / (popTotal + .01))/44.7;
   
   //added this here
-  var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/41.9;
-  var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/41.9;
+  var diRatioBur = (100 * minTotalBur / (popTotalBur + .01))/44.7;
+  var diRatioBen = (100 * minTotalBen / (popTotalBen + .01))/44.7;
   
   // copied from above
   

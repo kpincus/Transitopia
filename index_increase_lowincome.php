@@ -22,7 +22,7 @@
 <script src="bootstrap.min.js"></script>
 <link rel="stylesheet" href="bootstrap.min.css"/>
 <!-- Custom Styling --> 
-<link rel="stylesheet" href="app_minority.css"/>
+<link rel="stylesheet" href="app_lowincome.css"/>
 
 <!-- Leaflet -->
 <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
@@ -48,10 +48,10 @@
 	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Choose a service change scenario
 	<span class="caret"></span></button>
 	<ul class="dropdown-menu">
-	<li><a href="index_increase_minority.php">Increase service on high-ridership routes</a></li>
-	<li><a href="index_remove_minority.php">Remove a route and increase parallel service</a></li>
-	<li><a href="index_decrease_minority.php">Decrease service on low-ridership routes</a></li>
-	<li><a href="index_none_minority.php" class="active">[clear scenarios]</a></li>
+	<li><a href="index_increase_lowincome.php" class="active">Increase service on high-ridership routes</a></li>
+	<li><a href="index_remove_lowincome.php">Remove a route and increase parallel service</a></li>
+	<li><a href="index_decrease_lowincome.php">Decrease service on low-ridership routes</a></li>
+	<li><a href="index_none_lowincome.php">[clear scenarios]</a></li>
 	</ul>
 	</div>	
 	
@@ -61,8 +61,8 @@
 	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Choose an equity analysis type
 	<span class="caret"></span></button>
 	<ul class="dropdown-menu">
-	<li><a href="#" class="active">Disparate impact (minority)</a></li>
-	<li><a href="index_none_lowincome.php">Disproportionate burden (low-income)</a></li>
+	<li><a href="index_increase_minority.php">Disparate impact (minority)</a></li>
+	<li><a href="#" class="active">Disproportionate burden (low-income)</a></li>
 	</ul>
 	</div>
 	
@@ -76,13 +76,13 @@
 	<div class="col-md-4" id="calculations">
 	
 	<h2 class="subtitle">Analysis Summary</h2><br>
-	<h3 class="lowercase"> Disparate Burden Threshold: <span id="sliderRatioCopy" class="highlighted">  </span> </h3>			
-	<h3 class="lowercase"> Disparate Burden Ratio: <span id="calculatedRatioBur" class="highlighted">  </span> </h3>
+	<h3 class="lowercase"> Disproportionate Burden Threshold: <span id="sliderRatioCopy" class="highlighted">  </span> </h3> 	
+	<h3 class="lowercase"> Disproportionate Burden Ratio: <span id="calculatedRatioBur" class="highlighted">  </span> </h3> 
 	<h3 class="lowercase"> Result: <span id="isThereBurden" class="highlighted"> </span> </h3><br>
-	<h3 class="lowercase"> Disparate Benefit Threshold: <span id="sliderRatioOpp" class="highlighted">  </span> </h3>
-	<h3 class="lowercase"> Disparate Benefit Ratio: <span id="calculatedRatioBen" class="highlighted">  </span> </h3>
+	<h3 class="lowercase"> Disproportionate Benefit Threshold: <span id="sliderRatioOpp" class="highlighted">  </span> </h3>
+	<h3 class="lowercase"> Disproportionate Benefit Ratio: <span id="calculatedRatioBen" class="highlighted">  </span> </h3>
 	<h3 class="lowercase"> Result: <span id="isThereBenefit" class="highlighted"> </span> </h3>
-
+	
 	</div>
 	
 <!-- Row 3 -->
@@ -101,7 +101,7 @@
 </div>
 
 
-<script src="app_none_minority.js"></script>
+<script src="app_increase_lowincome.js"></script>
 <script src="slider.js"></script>
 
 </body>

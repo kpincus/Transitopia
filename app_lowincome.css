@@ -34,7 +34,7 @@ h1, h2, h3, h4 {
 h1 { 
   font-size: 54px;
   padding: 0px;
-  margin-top: 10px;
+  margin-top: 0px; 	//changed from 10
   margin-bottom: 10px;
   font-weight: 600;
 }
@@ -193,7 +193,7 @@ a.active {
 	color: rgb(182,0,141);
 	font-size: 20px;
 	line-height: 1.1;
-//	text-transform: uppercase;
+	text-transform: uppercase;	// comment out to change back to sentence case
 	font-family:"Arial", sans-serif;
 	font-weight: 700; 
 }

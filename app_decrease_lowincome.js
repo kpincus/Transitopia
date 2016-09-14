@@ -69,15 +69,15 @@ queue()
     results[0].forEach(function(i){ globalVRH += +i.TotalHours; })
      d3.select("#target-savings-dollars").text(d3.round(-globalVRH * .05, 2) + " hours")
 	
-/*	
+	
 ////////// start of scenario /////////////////
 
-	 d3.selectAll("#testScenario").on("click", function() {	 // changed
+	// d3.selectAll("#testScenario").on("click", function() {	 // changed
 	 
-		var routes = ["routeA", "routeB", "routeG"];
-		var changes = ["percent30", "percent-100", "percent-20"];
+		var routes = ["routeA", "routeQ", "routeT", "routeZ", "routeM"];
+		var changes = ["percent-10", "percent-10", "percent-10", "percent-10", "percent-30"];
 	 
-	 for (var i = 0; i < 3; i++) { 
+	 for (var i = 0; i < 5; i++) { 
 	 
 		//this.												// changed
 		routeName = routes[i];	//"routeA";					// changed
@@ -263,10 +263,10 @@ queue()
 			else if (diRatio > 0 && minTotal < 0) {return "N/A"}
             else { return "Disproportionate Benefit" }
           })   
-	 }}); 
+	// }});
+	 }; 
 
 /////////// end of scenario //////////////////
-*/
 
     //highlight rectangles
     d3.selectAll(".selection").on("mouseover", function() { 
