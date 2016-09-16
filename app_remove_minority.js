@@ -163,7 +163,7 @@ queue()
         } else {
           //highlight bus routes and text
           d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
-            .style("font-weight", 300)
+            .style("font-weight", 600)
             .style("fill", "black")
             .classed("clicked", false);
 
@@ -294,7 +294,7 @@ queue()
             var routeName = this.getAttribute("class").split(" ")[0];
             
             d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
-              .style("font-weight", 300)
+              .style("font-weight", 600)
               .style("fill", "black")
 
             d3.selectAll("." + routeName).filter(".routes")
@@ -418,7 +418,7 @@ queue()
         } else {
           //highlight bus routes and text
           d3.selectAll("." + routeName).filter("text").filter(".numRiders, .minPercent, .letterName, .vrhTime")
-            .style("font-weight", 300)
+            .style("font-weight", 600)
             .style("fill", "black")
             .classed("clicked", false);
 
@@ -661,13 +661,13 @@ CTPS.demoApp.generatePanel = function(source) {
 	  
 // parameters
 var margin = 10,
-  width = $("#slider").width()/1.5; //change width here
+  width = $("#slider").width()/1.75; //change width here
   height = 80;
 
 
 // scale function
 ratioScale = d3.scale.linear()
-  .domain([.7, 1.3])
+  .domain([.6, 1.4])
   .range([0, width - 4 * margin]) // changed 2 to a 4
   .clamp(true);
 
@@ -746,7 +746,16 @@ handle2.append('text')
   .attr("transform", "translate(" + (-30) + " ," + (height / 2 + 50) + ")");
   
   
- 
+// tick mark at 1 (mid-point) 
+var handlemid = slider.append("g")
+  .attr("class", "handle") 
+  
+handlemid.append("path")
+  .attr("transform", "translate(" + (width / 2 - 19.5) + "," + (height / 2 - 13) + ")")
+  .attr("d", "M 0 -4 V 15")
+  .style("stroke-width", 2.5)  
+
+  
 slider
   .call(brush.event)
 

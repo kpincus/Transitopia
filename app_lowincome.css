@@ -51,7 +51,7 @@ context {
  }
 
 #tableRows text { 
-  font-weight: 300;
+  font-weight: 600;
   font-family: "Open Sans";
 }
 
@@ -183,7 +183,6 @@ a.active {
 }
 
 
-
 /* style the dropdown */
 
 .dropdown-toggle {
@@ -198,15 +197,15 @@ a.active {
 	font-weight: 700; 
 }
 
+.dropdown-menu > li  > a {
+	color: black;
+	font-weight: 700;
+	opacity: 1;
+}
 
-/*
-.choiceLowIncome {
-	color: red;
+.dropdown-menu > li > a.active {
+    color: rgb(182,0,141);
 }
-.dropdown-menu a{
-    color: rgb(182,0,141) !important;
-}
-*/
 
 
 /*These elements are only visible to screen readers*/
